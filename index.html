@@ -1,47 +1,947 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>OrangeMart 3D — Cash on Delivery</title>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ORANGE MART 3D - Smart Superstore</title>
 <style>
-:root{--orange:#f97316;--dark:#101827;--panel:rgba(15,23,42,.96)}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111827;color:#fff;font-family:system-ui,-apple-system,sans-serif;touch-action:none}canvas#scene{display:block;width:100%;height:100%}button,input,select{font:inherit}button{cursor:pointer}#top{position:fixed;z-index:10;top:0;left:0;right:0;padding:calc(env(safe-area-inset-top,0px) + 10px) 12px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;pointer-events:none}#brand{pointer-events:auto;background:linear-gradient(135deg,#111827,#273449);border:1px solid #ffffff30;padding:8px 12px;border-radius:14px;font-weight:900;box-shadow:0 8px 24px #0007;font-size:14px}#brand small{display:block;color:#fdba74;font-size:10px;letter-spacing:1px}#actions{display:flex;gap:6px;pointer-events:auto}.btn{border:1px solid #ffffff38;background:#111827e8;color:#fff;border-radius:11px;padding:9px 11px;font-weight:750;box-shadow:0 4px 16px #0004}.btn.orange{background:linear-gradient(135deg,#fb923c,#ea580c);border-color:#fdba74}.panel{position:fixed;z-index:20;right:10px;top:calc(env(safe-area-inset-top,0px) + 65px);width:min(390px,94vw);max-height:72vh;overflow:auto;background:var(--panel);border:1px solid #ffffff2b;border-radius:17px;padding:13px;box-shadow:0 18px 50px #0009;display:none;backdrop-filter:blur(12px)}.panel h3{margin:2px 0 10px;font-size:17px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #ffffff18}.muted{color:#cbd5e1;font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.product{min-width:0;background:#1e293b;border:1px solid #ffffff20;border-radius:12px;overflow:hidden}.product img{width:100%;height:112px;object-fit:contain;background:#fff;display:block}.pbody{padding:8px}.pname{font-size:12px;font-weight:800;min-height:32px}.price{color:#fdba74;font-weight:900;margin:5px 0}.smallbtn{width:100%;border:0;border-radius:8px;padding:8px;background:#f97316;color:white;font-weight:800}.field{display:block;width:100%;margin:6px 0;padding:10px;border-radius:9px;border:1px solid #475569;background:#0f172a;color:white}#pad{position:fixed;left:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:10;display:grid;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(2,48px);gap:5px}#pad button{border:1px solid #ffffff40;border-radius:13px;background:#0f172ac9;color:#fff;font-size:20px;touch-action:none;backdrop-filter:blur(8px)}#hint{position:fixed;z-index:10;bottom:calc(env(safe-area-inset-bottom,0px) + 124px);left:50%;transform:translateX(-50%);max-width:85vw;text-align:center;background:#0f172ad9;border:1px solid #ffffff30;border-radius:12px;padding:8px 12px;font-size:12px;pointer-events:none}#toast{position:fixed;z-index:40;top:42%;left:50%;transform:translateX(-50%);background:#16a34a;color:white;padding:10px 16px;border-radius:24px;font-weight:800;opacity:0;pointer-events:none;transition:opacity .2s}#detail,#checkout{position:fixed;z-index:50;inset:0;background:#020617c9;display:none;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(6px)}.modal{width:min(420px,100%);max-height:88vh;overflow:auto;background:#fff;color:#0f172a;border-radius:18px;padding:16px}.modal img{width:100%;height:190px;object-fit:contain;background:#f8fafc;border-radius:12px}.modal h2{font-size:19px;margin:10px 0 4px}.modal .field{background:white;color:#111827;border-color:#cbd5e1}.modal button{margin-top:7px}.cats{display:grid;grid-template-columns:1fr 1fr;gap:7px}.cats button{background:#1e293b;color:#fff;border:1px solid #ffffff20;padding:10px;border-radius:10px;text-align:left}.pill{display:inline-block;background:#ffedd5;color:#9a3412;padding:3px 7px;border-radius:99px;font-size:11px;font-weight:800}@media(max-width:520px){#brand{font-size:12px;padding:7px 9px}#actions .btn{font-size:11px;padding:8px 9px}.panel{right:7px;top:calc(env(safe-area-inset-top,0px) + 60px);max-height:70vh}.product img{height:95px}#hint{font-size:11px}}
-</style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
-<canvas id="scene"></canvas><div id="top"><div id="brand">🟠 ORANGEMART <small>3D SMART STORE · CASH ON DELIVERY</small></div><div id="actions"><button class="btn" id="directoryBtn">☰ Categories</button><button class="btn orange" id="cartBtn">🛒 0 · PKR 0</button></div></div>
-<div class="panel" id="directory"><h3>🧭 Store Directory</h3><div class="cats" id="catList"></div><p class="muted">Category select karein ya 3D store mein shelves par tap karein.</p></div>
-<div class="panel" id="catalog"><div class="row"><h3 id="catalogTitle">OrangeMart Products</h3><button class="btn" id="closeCatalog">✕</button></div><input id="search" class="field" placeholder="Product search karein…"><div class="grid" id="productGrid"></div><button class="btn orange" id="loadMore" style="width:100%;margin-top:10px">Load More Products</button><p class="muted" id="loadStatus"></p></div>
-<div class="panel" id="cartPanel"><div class="row"><h3>🛒 Your Cart</h3><button class="btn" id="closeCart">✕</button></div><div id="cartRows"></div><div class="row"><b>Total</b><b id="cartTotal">PKR 0</b></div><button class="btn orange" id="checkoutBtn" style="width:100%">Cash on Delivery Checkout</button><button class="btn" id="emptyCart" style="width:100%;margin-top:7px">Empty Cart</button></div>
-<div id="detail"><div class="modal" id="detailContent"></div></div><div id="checkout"><div class="modal" id="checkoutContent"></div></div><div id="toast"></div><div id="hint">3D store mein move karein · shelves par tap karke products dekhein · COD order WhatsApp par bhejein</div>
-<div id="pad"><button></button><button data-k="f">▲</button><button></button><button data-k="l">◀</button><button data-k="b">▼</button><button data-k="r">▶</button></div>
+html,body{margin:0;height:100%;overflow:hidden;background:#0f172a;font-family:system-ui,-apple-system,sans-serif;touch-action:none;-webkit-user-select:none;user-select:none;color:#fff}
+canvas{display:block;width:100%;height:100%}
+#top{position:fixed;left:0;right:0;top:0;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 0;display:flex;justify-content:space-between;align-items:center;gap:8px;pointer-events:none;z-index:10}
+#brand{background:linear-gradient(135deg,#c2410c,#ea580c);border:1px solid rgba(255,255,255,0.25);padding:8px 14px;border-radius:14px;font-weight:700;font-size:14px;line-height:1.2;box-shadow:0 8px 24px rgba(234,88,12,0.4);backdrop-filter:blur(10px)}
+#brand small{display:block;font-weight:600;font-size:10px;color:#fed7aa;letter-spacing:0.8px;text-transform:uppercase}
+.tb{pointer-events:auto;background:rgba(15,23,42,0.85);color:#fff;border:1px solid rgba(255,255,255,.2);padding:9px 14px;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;backdrop-filter:blur(10px);box-shadow:0 4px 16px rgba(0,0,0,0.3);transition:transform .15s}
+.tb:active{transform:scale(0.96)}
+.pn{position:fixed;right:14px;top:calc(env(safe-area-inset-top,0px) + 64px);width:min(320px,88vw);max-height:58%;overflow:auto;background:rgba(15,23,42,.94);border-radius:16px;padding:14px;display:none;z-index:20;box-shadow:0 16px 36px rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(14px)}
+.pn .row{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #334155;font-size:14px}
+.pn button{border:1px solid #475569;border-radius:10px;font-weight:700;background:#1e293b;color:#fff;padding:10px;cursor:pointer;transition:background .2s}
+.pn button:hover{background:#334155}
+#clr{margin-top:12px;width:100%;background:#ef4444;border-color:#ef4444}
+#aisles{display:none;grid-template-columns:1fr 1fr;gap:8px}
+#toast{position:fixed;left:50%;top:36%;transform:translateX(-50%);background:linear-gradient(135deg,#ea580c,#f97316);padding:10px 20px;border-radius:24px;font-weight:600;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;z-index:30;box-shadow:0 10px 25px rgba(234,88,12,.4)}
+#hint{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 145px);transform:translateX(-50%);background:rgba(15,23,42,.85);border:1px solid rgba(255,255,255,.2);padding:9px 18px;border-radius:16px;font-size:13px;text-align:center;pointer-events:none;transition:opacity 1s;width:max-content;max-width:88vw;z-index:10;backdrop-filter:blur(8px)}
+#pad{position:fixed;left:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);display:grid;grid-template-columns:repeat(3,56px);grid-template-rows:repeat(2,56px);gap:6px;z-index:10}
+#pad div{background:rgba(15,23,42,.75);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;touch-action:none;user-select:none;backdrop-filter:blur(8px)}
+#pad div:active{background:#f97316;color:#0f172a}
+#bill{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;z-index:50;backdrop-filter:blur(6px)}
+#bc{background:#ffffff;color:#0f172a;border-radius:18px;width:min(350px,100%);max-height:82%;overflow:auto;padding:18px;font-size:14px;box-shadow:0 20px 40px rgba(0,0,0,0.4)}
+#bc .r{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed #cbd5e1}
+#bc button{background:#ea580c;color:#fff;border:0;border-radius:10px;padding:11px 14px;font-weight:700;margin:8px 4px 0 0;cursor:pointer}
+#billBtn{position:fixed;right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 30px);font-size:15px;padding:14px 20px;z-index:10;background:linear-gradient(135deg,#16a34a,#15803d);border:none;box-shadow:0 8px 24px rgba(22,163,74,0.4)}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="top">
+  <div id="brand">🛒 ORANGE MART 3D<small>OrangeMart Live Catalog · COD Only</small></div>
+  <div>
+    <button class="tb" id="aBtn">📍 Store Aisles</button> 
+    <button class="tb" id="cartBtn">🛒 0 · PKR 0</button>
+  </div>
+</div>
+<div class="pn" id="aisles"></div>
+<div class="pn" id="panel"></div>
+<div id="toast"></div>
+<div id="hint">OrangeMart 72 Products Loaded! Tap products to add in trolley.</div>
+<div id="bill"><div id="bc"></div></div>
+<button class="tb" id="billBtn" style="display:none">💳 Proceed to Checkout</button>
+<div id="pad">
+  <div></div><div data-k="f">▲</div><div></div>
+  <div data-k="l">◀</div><div data-k="b">▼</div><div data-k="r">▶</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-const WHATSAPP='923105784772';
-const canvas=document.getElementById('scene');const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight,false);
-const scene=new THREE.Scene();scene.background=new THREE.Color('#182131');scene.fog=new THREE.Fog('#182131',15,42);
-const camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,.1,90);camera.rotation.order='YXZ';camera.position.set(0,1.6,9);
-scene.add(new THREE.HemisphereLight('#ffffff','#334155',1.3));const sun=new THREE.DirectionalLight('#fff1d6',1.1);sun.position.set(4,10,5);scene.add(sun);
-const mat=c=>new THREE.MeshLambertMaterial({color:c});const solid=(w,h,d,color,x,y,z)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(color));m.position.set(x,y,z);scene.add(m);return m};
-solid(22,.12,28,'#dbe2ea',0,-.08,-1);solid(22,.12,28,'#151a24',0,4,-1);solid(.18,4,28,'#e2e8f0',-11,2,-1);solid(.18,4,28,'#e2e8f0',11,2,-1);solid(22,4,.18,'#cbd5e1',0,2,-15);
-// OrangeMart sign
-function signTexture(text){const c=document.createElement('canvas');c.width=1024;c.height=180;const x=c.getContext('2d');x.fillStyle='#111827';x.fillRect(0,0,1024,180);x.strokeStyle='#f97316';x.lineWidth=10;x.strokeRect(6,6,1012,168);x.fillStyle='white';x.font='900 64px system-ui';x.textAlign='center';x.textBaseline='middle';x.fillText(text,512,90);return new THREE.CanvasTexture(c)}const sign=new THREE.Mesh(new THREE.PlaneGeometry(9,1.6),new THREE.MeshBasicMaterial({map:signTexture('ORANGEMART · CASH ON DELIVERY')}));sign.position.set(0,2.8,-14.85);scene.add(sign);
-const loader=new THREE.TextureLoader();let products=[],categories=[],visibleCount=12,selectedCategory='All',cart={},productMeshes=[],shelfSpots=[];let loaded=false;
-const fmt=n=>'PKR '+Number(n||0).toLocaleString('en-PK');const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function imagePath(p){return p.localImage||p.img||p.image||p.fallbackImg||''}function imgSrc(p){return imagePath(p)}
-function labelTexture(p){const c=document.createElement('canvas');c.width=256;c.height=310;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,256,310);x.fillStyle='#f97316';x.fillRect(0,0,256,14);x.fillStyle='#fff7ed';x.fillRect(8,22,240,178);x.fillStyle='#9a3412';x.font='bold 17px system-ui';x.textAlign='center';const name=p.name||'Product';let words=name.split(' '),lines=[''];for(const word of words){let last=lines.length-1;if((lines[last]+' '+word).trim().length>20)lines.push(word);else lines[last]=(lines[last]+' '+word).trim()}lines.slice(0,3).forEach((l,i)=>x.fillText(l,128,218+i*22));x.fillStyle='#ea580c';x.font='900 27px system-ui';x.fillText(fmt(p.price),128,286);return new THREE.CanvasTexture(c)}
-function clearShelf(){for(const m of productMeshes){scene.remove(m);if(m.geometry)m.geometry.dispose()}productMeshes=[];shelfSpots=[]}
-function buildShelves(){clearShelf();const cols=4,rows=Math.ceil(products.length/cols);const xPositions=[-7.4,-2.5,2.5,7.4];for(let col=0;col<cols;col++){let x=xPositions[col];for(let level=0;level<3;level++){solid(1.6,.08,Math.min(20,Math.max(5,rows*.55)), '#9a6b43',x,.55+level*.92,-2.5);solid(1.65,.07,Math.min(20,Math.max(5,rows*.55)),'#263244',x,.62+level*.92,-2.5)}}
- products.forEach((p,i)=>{const col=i%cols,row=Math.floor(i/cols),x=xPositions[col],z=-10.5+row*.65,level=(row%3),y=.86+level*.92;const geometry=new THREE.BoxGeometry(.48,.52,.4);const tex=labelTexture(p);const m=new THREE.Mesh(geometry,[mat('#d1d5db'),mat('#d1d5db'),mat('#d1d5db'),mat('#d1d5db'),new THREE.MeshLambertMaterial({map:tex}),mat('#d1d5db')]);m.position.set(x+(i%2)*.55-.25,y,z);m.userData.productId=p.id;m.userData.p=p;scene.add(m);productMeshes.push(m);shelfSpots.push({x:m.position.x,y,z,cat:p.category});});
- // end-cap category panels
- categories.forEach((c,i)=>{const x=-8.3+(i%4)*5.5,z=-12.7-Math.floor(i/4)*.15;const cv=document.createElement('canvas');cv.width=512;cv.height=100;const cx=cv.getContext('2d');cx.fillStyle='#111827';cx.fillRect(0,0,512,100);cx.fillStyle='#fb923c';cx.fillRect(0,0,10,100);cx.fillStyle='white';cx.font='bold 30px system-ui';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(c.name,260,50,470);const panel=new THREE.Mesh(new THREE.PlaneGeometry(3.2,.62),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cv)}));panel.position.set(x,3.25,z);scene.add(panel)});
+// RAW 72 PRODUCTS FROM YOUR OrangeMart_Product_Names_Prices.json
+const RAW_ORANGE_MART = [
+  {"name":"Classic Smart Watch","price":2850,"image":"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Sport Digital Watch","price":3450,"image":"https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Minimal Silver Watch","price":4200,"image":"https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Everyday Black Watch","price":2600,"image":"https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Premium Chronograph Watch","price":5200,"image":"https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Classic Leather Watch","price":3900,"image":"https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Modern Blue Watch","price":3150,"image":"https://images.unsplash.com/photo-1508057198894-247b23fe5ade?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Elegant Ladies Watch","price":2950,"image":"https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Outdoor Sports Watch","price":3750,"image":"https://images.unsplash.com/photo-1510017803434-a899398421b3?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Luxury Style Watch","price":6100,"image":"https://images.unsplash.com/photo-1526045431048-f857369baa09?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Premium Wireless Headphones","price":4200,"image":"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Everyday Sunglasses","price":1750,"image":"https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Wireless Earbuds","price":2500,"image":"https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Travel Backpack","price":3300,"image":"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Fashion Handbag","price":2900,"image":"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Classic Wallet","price":1250,"image":"https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Phone Protective Case","price":850,"image":"https://images.unsplash.com/photo-1601593346740-925612772716?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Bluetooth Speaker","price":2800,"image":"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Everyday Cap","price":950,"image":"https://images.unsplash.com/photo-1515816003229-3d9a71d8b7f1?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Travel Organizer","price":1450,"image":"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Skincare Essentials Set","price":1950,"image":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Facial Cleanser","price":1150,"image":"https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Moisturizing Cream","price":1350,"image":"https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Hair Care Shampoo","price":950,"image":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Body Lotion","price":1200,"image":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Perfume Gift Set","price":2400,"image":"https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Makeup Brush Set","price":1450,"image":"https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Beauty Serum","price":1650,"image":"https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Personal Care Kit","price":2100,"image":"https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Cosmetic Travel Bag","price":1250,"image":"https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Car Phone Holder","price":950,"image":"https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Car Charger Adapter","price":850,"image":"https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Car Interior LED Lights","price":1450,"image":"https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Car Dashboard Camera","price":5200,"image":"https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Portable Tyre Inflator","price":3900,"image":"https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Car Cleaning Kit","price":1750,"image":"https://images.unsplash.com/photo-1507136566006-cfc505b114fc?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Bluetooth FM Transmitter","price":1250,"image":"https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Car Seat Organizer","price":1350,"image":"https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Emergency LED Torch","price":1100,"image":"https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Car Vacuum Cleaner","price":2850,"image":"https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Minimal Desk Lamp","price":3200,"image":"https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Kitchen Organizer","price":2250,"image":"https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Ceramic Coffee Mug","price":650,"image":"https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Water Bottle","price":850,"image":"https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Non-stick Cookware Set","price":4900,"image":"https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Decorative Table Vase","price":1250,"image":"https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Soft Cushion Set","price":1800,"image":"https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Storage Basket","price":950,"image":"https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Modern Wall Clock","price":1650,"image":"https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Bedside Organizer","price":1150,"image":"https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Modern Smartphone","price":28999,"image":"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Wireless Charging Pad","price":1750,"image":"https://images.unsplash.com/photo-1591290619762-c588f7e9a8a4?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Portable Power Bank","price":2400,"image":"https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Tablet Stand","price":950,"image":"https://images.unsplash.com/photo-1589739900243-4b52cd9b104e?auto=format&fit=crop&w=700&q=85"},
+  {"name":"USB-C Hub Adapter","price":2200,"image":"https://images.unsplash.com/photo-1625842268584-8f3296236761?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Smart Home Speaker","price":5200,"image":"https://images.unsplash.com/photo-1543512214-318c7553f230?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Mini Projector","price":12500,"image":"https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Gaming Controller","price":3900,"image":"https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Wireless Keyboard","price":2600,"image":"https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=700&q=85"},
+  {"name":"USB Desk Fan","price":1450,"image":"https://images.unsplash.com/photo-1618941716939-553df3c6c278?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Rose Gold Analog Watch","price":3250,"image":"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Silicone Watch Strap","price":650,"image":"https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Travel Sunglasses Case","price":550,"image":"https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Makeup Storage Pouch","price":750,"image":"https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Reusable Facial Headband","price":450,"image":"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Car Phone Holder Mount","price":1250,"image":"https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Car Seat Neck Pillow","price":1450,"image":"https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Silicone Kitchen Utensils","price":1850,"image":"https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Insulated Travel Tumbler","price":1350,"image":"https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Foldable Phone Stand","price":550,"image":"https://images.unsplash.com/photo-1589739900243-4b52cd9b104e?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Braided USB-C Cable","price":450,"image":"https://images.unsplash.com/photo-1625842268584-8f3296236761?auto=format&fit=crop&w=700&q=85"},
+  {"name":"Compact Bluetooth Mouse","price":1650,"image":"https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=700&q=85"}
+];
+
+const canvas=document.getElementById('c');
+const R=new THREE.WebGLRenderer({canvas,antialias:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));
+
+const S=new THREE.Scene();
+S.background=new THREE.Color('#1a1f2c');
+S.fog=new THREE.Fog('#1a1f2c',12,38);
+const cam=new THREE.PerspectiveCamera(70,1,.1,70);cam.rotation.order='YXZ';cam.position.set(3,1.6,6.4);S.add(cam);
+
+function resize(){R.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
+addEventListener('resize',resize);resize();
+
+S.add(new THREE.HemisphereLight('#f8fafc','#1e293b',1.05));
+const dl=new THREE.DirectionalLight('#fffbeb',.65);dl.position.set(4,9,4);S.add(dl);
+const L=m=>new THREE.MeshLambertMaterial(m);
+const box=(w,h,d,mat,x,y,z)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);S.add(m);return m};
+
+// Floor & Room
+const fc=document.createElement('canvas');fc.width=256;fc.height=256;const fx=fc.getContext('2d');
+fx.fillStyle='#e2e8f0';fx.fillRect(0,0,256,256);
+fx.fillStyle='#cbd5e1';for(let i=0;i<120;i++){fx.beginPath();fx.arc(Math.random()*256,Math.random()*256,Math.random()*2.5+1,0,Math.PI*2);fx.fill();}
+fx.fillStyle='#94a3b8';for(let i=0;i<60;i++){fx.beginPath();fx.arc(Math.random()*256,Math.random()*256,Math.random()*1.8+0.5,0,Math.PI*2);fx.fill();}
+fx.strokeStyle='rgba(15,23,42,0.12)';fx.lineWidth=3;fx.strokeRect(0,0,256,256);
+fx.strokeStyle='rgba(234,88,12,0.3)';fx.lineWidth=1;fx.strokeRect(2,2,252,252);
+const ft=new THREE.CanvasTexture(fc);ft.wrapS=ft.wrapT=THREE.RepeatWrapping;ft.repeat.set(21/3,24/3);
+box(21,.1,24,L({map:ft,roughness:0.3}),0,-.05,-.5);
+
+box(21,.1,24,L({color:'#141721'}),0,3.6,-.5);
+const ledLightMat=new THREE.MeshBasicMaterial({color:'#ffffff'});
+const trackMat=L({color:'#18181b'});
+for(let x=-8;x<=8;x+=4){
+  box(.12,.08,20,trackMat,x,3.4,-.5);
+  for(let z=-8;z<=8;z+=5.5) box(.015,.2,.015,L({color:'#71717a'}),x,3.5,z);
+  box(.08,.03,19.6,ledLightMat,x,3.35,-.5);
 }
-function productCard(p){return `<article class="product"><img src="${safe(imgSrc(p))}" alt="${safe(p.name)}" loading="lazy" onerror="if(this.dataset.fallback!=='1'&&'${safe(p.fallbackImg||'')}'){this.dataset.fallback='1';this.src='${safe(p.fallbackImg||'')}'}else{this.style.visibility='hidden'}"><div class="pbody"><div class="pname">${safe(p.name)}</div><div class="muted">${safe(p.category||'Products')}</div><div class="price">${fmt(p.price)}</div><button class="smallbtn" data-detail="${safe(p.id)}">View / Add</button></div></article>`}
-function getFiltered(){const q=(document.getElementById('search')?.value||'').toLowerCase();return products.filter(p=>(selectedCategory==='All'||p.category===selectedCategory)&&(`${p.name} ${p.category} ${p.desc||''}`).toLowerCase().includes(q))}
-function renderCatalog(reset=false){const all=getFiltered();if(reset)visibleCount=12;const shown=all.slice(0,visibleCount);document.getElementById('productGrid').innerHTML=shown.map(productCard).join('')||'<p class="muted">Is category mein koi product nahi mila.</p>';document.getElementById('catalogTitle').textContent=selectedCategory==='All'?'OrangeMart Products':selectedCategory;document.getElementById('loadMore').style.display=visibleCount<all.length?'block':'none';document.getElementById('loadStatus').textContent=`${shown.length} / ${all.length} products shown · products.json`;document.querySelectorAll('[data-detail]').forEach(b=>b.onclick=()=>openDetail(b.dataset.detail));}
-function showPanel(id){['directory','catalog','cartPanel'].forEach(x=>document.getElementById(x).style.display=x===id?'block':'none')};function hidePanels(){['directory','catalog','cartPanel'].forEach(x=>document.getElementById(x).style.display='none')}
-function openDetail(id){const p=products.find(x=>String(x.id)===String(id));if(!p)return;let colors=Array.isArray(p.colors)?p.colors:[],sizes=Array.isArray(p.sizes)?p.sizes:[];document.getElementById('detailContent').innerHTML=`<button class="btn" id="detailClose" style="float:right;color:white">✕</button><img src="${safe(imgSrc(p))}" alt="${safe(p.name)}" onerror="this.src='${safe(p.fallbackImg||'')}';this.onerror=null"><h2>${safe(p.name)}</h2><div class="pill">${safe(p.category||'Product')}</div><p style="font-size:22px;font-weight:900;color:#ea580c">${fmt(p.price)}</p><p>${safe(p.desc||'')}</p>${colors.length?`<label>Color<select class="field" id="optColor"><option value="">Choose color</option>${colors.map(c=>`<option>${safe(c)}</option>`).join('')}</select></label>`:''}${sizes.length?`<label>Size / Model<select class="field" id="optSize"><option value="">Choose size</option>${sizes.map(s=>`<option>${safe(s)}</option>`).join('')}</select></label>`:''}<label>Quantity<input class="field" id="optQty" type="number" min="1" max="99" value="1"></label><button class="btn orange" id="addDetail" style="width:100%">Add to Cart</button>`;document.getElementById('detail').style.display='flex';document.getElementById('detailClose').onclick=()=>document.getElementById('detail').style.display='none';document.getElementById('addDetail').onclick=()=>{const color=document.getElementById('optColor')?.value||'',size=document.getElementById('optSize')?.value||'';if(colors.length&&!color){alert('Color select karein.');return}if(sizes.length&&!size){alert('Size / Model select karein.');return}const qty=Math.max(1,Math.min(99,parseInt(document.getElementById('optQty').value)||1));addCart(p,color,size,qty);document.getElementById('detail').style.display='none';toast(`${p.name} cart mein add ho gaya`)};}
-function addCart(p,color='',size='',qty=1){const key=[p.id,color,size].join('|');if(!cart[key])cart[key]={p,color,size,qty:0};cart[key].qty+=qty;renderCart()}
-function renderCart(){let count=0,total=0;const rows=Object.entries(cart);rows.forEach(([k,v])=>{count+=v.qty;total+=v.qty*Number(v.p.price||0)});document.getElementById('cartBtn').textContent=`🛒 ${count} · ${fmt(total)}`;document.getElementById('cartRows').innerHTML=rows.map(([k,v])=>`<div class="row"><div style="min-width:0"><b>${safe(v.p.name)}</b><div class="muted">${safe([v.color,v.size].filter(Boolean).join(' · '))} · ${v.qty} × ${fmt(v.p.price)}</div><button class="btn" data-remove="${safe(k)}" style="padding:4px 8px;margin-top:5px">− Remove</button></div><b>${fmt(v.qty*v.p.price)}</b></div>`).join('')||'<p class="muted">Cart khaali hai.</p>';document.getElementById('cartTotal').textContent=fmt(total);document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{delete cart[b.dataset.remove];renderCart()});document.getElementById('checkoutBtn').disabled=!count;document.getElementById('checkoutBtn').style.opacity=count?1:.5}
-function toast(s){const t=document.getElementById('toast');t.textContent=s;t.style.opacity=1;clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.style.opacity=0,1800)}
-function checkout(){const entries=Object.values(cart);if(!entries.length){toast('Pehle cart mein product add karein');return}const total=entries.reduce((s,v)=>s+v.qty*Number(v.p.price||0),0);document.getElementById('checkoutContent').innerHTML=`<button class="btn" id="checkoutClose" style="float:right;color:white">✕</button><h2>Cash on Delivery</h2><p>Order total: <b style="color:#ea580c">${fmt(total)}</b></p><p class="muted">Apna delivery address aur contact number dein. Confirm karne par WhatsApp message khulega.</p><form id="orderForm"><input class="field" name="name" placeholder="Full name" required maxlength="100"><input class="field" name="phone" placeholder="Mobile number" required maxlength="30"><textarea class="field" name="address" placeholder="Complete delivery address" required rows="3" maxlength="500"></textarea><textarea class="field" name="notes" placeholder="Extra instructions (optional)" rows="2" maxlength="300"></textarea><button class="btn orange" type="submit" style="width:100%">Send COD Order on WhatsApp</button></form><p class="muted">WhatsApp par message khulne ke baad Send dabana zaroori hai.</p>`;document.getElementById('checkout').style.display='flex';document.getElementById('checkoutClose').onclick=()=>document.getElementById('checkout').style.display='none';document.getElementById('orderForm').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target),name=f.get('name'),phone=f.get('phone'),address=f.get('address'),notes=f.get('notes');let msg=`ORANGEMART — CASH ON DELIVERY ORDER%0A%0ACustomer: ${name}%0APhone: ${phone}%0AAddress: ${address}%0A%0AItems:%0A`;entries.forEach(v=>{msg+=`- ${v.p.name}${v.color?' | Color: '+v.color:''}${v.size?' | Size: '+v.size:''} × ${v.qty} = PKR ${v.qty*v.p.price}%0A`});msg+=`%0ATotal: PKR ${total}%0APayment: Cash on Delivery${notes?'%0ANotes: '+notes:''}`;window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(decodeURIComponent(msg))}`,'_blank');document.getElementById('checkout').style.display='none';toast('WhatsApp order message tayyar hai; Send dabayein.');}}
-async function loadData(){try{const res=await fetch('./products.json',{cache:'no-store'});if(!res.ok)throw Error('products.json load nahi hui');const data=await res.json();products=Array.isArray(data)?data:(data.products||[]);categories=(data.categories||[]);if(!products.length)throw Error('JSON mein products nahi hain');loaded=true;buildShelves();renderCatalog(true);renderCart();renderCategories();}catch(e){document.getElementById('loadStatus').textContent='products.json load nahi hui. index.html aur products.json same folder mein rakhein, aur GitHub Pages se website kholein.';console.error(e)}}
-function renderCategories(){const names=['All',...new Set([...categories.map(c=>c.name),...products.map(p=>p.category).filter(Boolean)])];document.getElementById('catList').innerHTML=names.map(n=>`<button data-cat="${safe(n)}">${n==='All'?'🛍️': '📦'} ${safe(n)}</button>`).join('');document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{selectedCategory=b.dataset.cat;visibleCount=12;renderCatalog(true);showPanel('catalog')})}
-// 3D controls and shelf selection
-const keys={f:0,b:0,l:0,r:0};document.querySelectorAll('#pad [data-k]').forEach(b=>{const k=b.dataset.k;b.onpointerdown=e=>{keys[k]=1;e.preventDefault()};['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>keys[k]=0))});const keyMap={KeyW:'f',ArrowUp:'f',KeyS:'b',ArrowDown:'b',KeyA:'l',ArrowLeft:'l',KeyD:'r',ArrowRight:'r'};addEventListener('keydown',e=>{if(keyMap[e.code])keys[keyMap[e.code]]=1});addEventListener('keyup',e=>{if(keyMap[e.code])keys[keyMap[e.code]]=0});let yaw=0,pitch=-.04,drag=null;canvas.addEventListener('pointerdown',e=>{drag={id:e.pointerId,x:e.clientX,y:e.clientY,sx:e.clientX,sy:e.clientY,t:performance.now()};canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;yaw-=(e.clientX-drag.x)*.005;pitch=Math.max(-.8,Math.min(.8,pitch-(e.clientY-drag.y)*.004));drag.x=e.clientX;drag.y=e.clientY});const ray=new THREE.Raycaster();function tap(x,y){ray.setFromCamera({x:x/innerWidth*2-1,y:-(y/innerHeight)*2+1},camera);const h=ray.intersectObjects(productMeshes)[0];if(h&&h.distance<12){openDetail(h.object.userData.productId);return}showPanel('catalog');renderCatalog(true)}canvas.addEventListener('pointerup',e=>{if(!drag||drag.id!==e.pointerId)return;if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<8&&performance.now()-drag.t<350)tap(e.clientX,e.clientY);drag=null});
-document.getElementById('directoryBtn').onclick=()=>{const v=document.getElementById('directory').style.display==='block';hidePanels();if(!v)showPanel('directory')};document.getElementById('cartBtn').onclick=()=>{const v=document.getElementById('cartPanel').style.display==='block';hidePanels();if(!v)showPanel('cartPanel')};document.getElementById('closeCatalog').onclick=hidePanels;document.getElementById('closeCart').onclick=hidePanels;document.getElementById('loadMore').onclick=()=>{visibleCount+=12;renderCatalog()};document.getElementById('search').addEventListener('input',()=>renderCatalog(true));document.getElementById('checkoutBtn').onclick=checkout;document.getElementById('emptyCart').onclick=()=>{cart={};renderCart()};
-const clock=new THREE.Clock();function loop(){const dt=Math.min(clock.getDelta(),.05),speed=3*dt,p=camera.position;const f=keys.f-keys.b,r=keys.r-keys.l;const nx=p.x+(-Math.sin(yaw)*f+Math.cos(yaw)*r)*speed,nz=p.z+(-Math.cos(yaw)*f-Math.sin(yaw)*r)*speed;p.x=Math.max(-9.7,Math.min(9.7,nx));p.z=Math.max(-13.5,Math.min(10.5,nz));camera.rotation.set(pitch,yaw,0);renderer.render(scene,camera);requestAnimationFrame(loop)}addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()});loadData();loop();setTimeout(()=>document.getElementById('hint').style.opacity=0,10000);
-</script></body></html>
+
+const modernWall=L({color:'#e2e8f0'});
+box(.2,3.6,24,modernWall,-10.5,1.8,-.5);box(.2,3.6,24,modernWall,10.5,1.8,-.5);
+box(21,3.6,.2,modernWall,0,1.8,-12);box(21,3.6,.2,modernWall,0,1.8,11);
+const woodMat=L({color:'#b48356'});
+for(let wx=-9;wx<=9;wx+=0.3) box(.14,3.6,.04,woodMat,wx,1.8,-11.88);
+
+function modernStoreSign(txt,w,h){
+ const c=document.createElement('canvas');c.width=1024;c.height=Math.round(1024*h/w);const x=c.getContext('2d');
+ x.fillStyle='#0f172a';x.fillRect(0,0,c.width,c.height);
+ x.strokeStyle='#ea580c';x.lineWidth=8;x.strokeRect(6,6,c.width-12,c.height-12);
+ x.fillStyle='#ffffff';x.font='900 64px system-ui,sans-serif';x.textAlign='center';x.textBaseline='middle';
+ x.letterSpacing='3px';x.fillText(txt,c.width/2,c.height/2);
+ return new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c)}));
+}
+const bs=modernStoreSign('ORANGE MART · PREMIUM STORE',8.6,1.3);
+bs.position.set(0,2.6,-11.82);S.add(bs);
+
+function modernCatSign(txt,w,h,accent='#ea580c'){
+ const c=document.createElement('canvas');c.width=512;c.height=Math.round(512*h/w);const x=c.getContext('2d');
+ x.fillStyle='rgba(15,23,42,0.95)';x.beginPath();x.roundRect(4,4,c.width-8,c.height-8,14);x.fill();
+ x.strokeStyle=accent;x.lineWidth=5;x.stroke();
+ x.fillStyle='#ffffff';x.font='bold 38px system-ui,sans-serif';x.textAlign='center';x.textBaseline='middle';
+ x.fillText(txt,c.width/2,c.height/2,480);
+ return new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c)}));
+}
+
+// REAL PHOTO TEXTURE GENERATOR FOR UNSPLASH IMAGES
+function createUnsplashProductMaterial(name, price, imgUrl, accentColor){
+  const c=document.createElement('canvas');c.width=256;c.height=300;const x=c.getContext('2d');
+  const tex=new THREE.CanvasTexture(c);
+
+  function draw(img=null){
+    x.fillStyle='#ffffff';x.fillRect(0,0,256,300);
+    // Top Color Accent
+    x.fillStyle=accentColor||'#ea580c';x.fillRect(0,0,256,12);
+
+    // Draw Unsplash Photo
+    if(img && img.complete && img.naturalWidth > 0){
+      x.drawImage(img,14,18,228,180);
+    } else {
+      x.fillStyle='#f1f5f9';x.fillRect(14,18,228,180);
+      x.fillStyle='#64748b';x.font='bold 22px system-ui,sans-serif';x.textAlign='center';
+      x.fillText('OrangeMart',128,110);
+    }
+
+    // Border
+    x.strokeStyle='#e2e8f0';x.lineWidth=2;x.strokeRect(14,18,228,180);
+
+    // Product Title
+    x.fillStyle='#0f172a';x.textAlign='center';x.textBaseline='middle';
+    if(name.length > 22){
+      x.font='bold 14px system-ui,sans-serif';
+      x.fillText(name.slice(0,24),128,224);
+      x.fillText(name.slice(24,46),128,244);
+    } else {
+      x.font='bold 17px system-ui,sans-serif';
+      x.fillText(name,128,232);
+    }
+
+    // PKR Price Tag
+    x.fillStyle='#ea580c';
+    x.font='900 20px system-ui,sans-serif';
+    x.fillText('PKR '+price,128,276);
+    tex.needsUpdate=true;
+  }
+
+  draw(null);
+
+  if(imgUrl){
+    const img=new Image();
+    img.crossOrigin="anonymous";
+    img.onload=()=>draw(img);
+    img.onerror=()=>draw(null);
+    img.src=imgUrl;
+  }
+
+  return L({map:tex});
+}
+
+// 3D Trolley Builder
+const metalMat=L({color:'#cbd5e1'}),wheelMat=L({color:'#18181b'}),handleGripMat=L({color:'#ea580c'}),miniItemGeo=new THREE.BoxGeometry(.11,.11,.11);
+function createTrolley3D(){
+  const tr=new THREE.Group();
+  const base=new THREE.Mesh(new THREE.BoxGeometry(.52,.04,.7),metalMat);base.position.set(0,.2,0);tr.add(base);
+  [[-.22,.08,-.26],[.22,.08,-.26],[-.22,.08,.26],[.22,.08,.26]].forEach(([wx,wy,wz])=>{
+    const w=new THREE.Mesh(new THREE.CylinderGeometry(.055,.055,.04,10),wheelMat);
+    w.rotation.z=Math.PI/2;w.position.set(wx,wy,wz);tr.add(w);
+  });
+  [[-.22,.48,-.28],[.22,.48,-.28],[-.22,.48,.28],[.22,.48,.28]].forEach(([lx,ly,lz])=>{
+    const leg=new THREE.Mesh(new THREE.CylinderGeometry(.015,.015,.55),metalMat);leg.position.set(lx,ly,lz);tr.add(leg);
+  });
+  const basketMat=new THREE.MeshLambertMaterial({color:'#94a3b8',wireframe:true});
+  const basket=new THREE.Mesh(new THREE.BoxGeometry(.54,.42,.72),basketMat);basket.position.set(0,.55,0);tr.add(basket);
+  const basketBottom=new THREE.Mesh(new THREE.BoxGeometry(.52,.02,.7),metalMat);basketBottom.position.set(0,.35,0);tr.add(basketBottom);
+
+  const handleBar=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.52),handleGripMat);
+  handleBar.rotation.z=Math.PI/2;handleBar.position.set(0,.82,-.37);tr.add(handleBar);
+  [-.22,.22].forEach(hx=>{
+    const sup=new THREE.Mesh(new THREE.CylinderGeometry(.014,.014,.2),metalMat);
+    sup.position.set(hx,.74,-.36);sup.rotation.x=.35;tr.add(sup);
+  });
+
+  tr.itemsGroup=new THREE.Group();tr.itemsGroup.position.set(0,.38,0);tr.add(tr.itemsGroup);
+  tr.itemsCount=0;
+  return tr;
+}
+
+// Pixar Faces
+function createPixarFaceTexture(type, eyeColor, skinTone){
+  const fc=document.createElement('canvas');fc.width=512;fc.height=512;const fx=fc.getContext('2d');
+  fx.fillStyle=skinTone;fx.fillRect(0,0,512,512);
+  const blush=fx.createRadialGradient(90,320,10,90,320,70);blush.addColorStop(0,'rgba(244,114,182,0.4)');blush.addColorStop(1,'rgba(244,114,182,0)');
+  fx.fillStyle=blush;fx.beginPath();fx.arc(90,320,70,0,Math.PI*2);fx.fill();
+  const blush2=fx.createRadialGradient(422,320,10,422,320,70);blush2.addColorStop(0,'rgba(244,114,182,0.4)');blush2.addColorStop(1,'rgba(244,114,182,0)');
+  fx.fillStyle=blush2;fx.beginPath();fx.arc(422,320,70,0,Math.PI*2);fx.fill();
+
+  if(type==='girl'){
+    fx.fillStyle='rgba(161,98,7,0.35)';
+    [70,85,100,412,427,442,240,256,272].forEach((px,i)=>{fx.beginPath();fx.arc(px,315+((i%3)*6),2.2,0,Math.PI*2);fx.fill();});
+  }
+  fx.fillStyle='#2b1810';fx.lineWidth=10;fx.lineCap='round';
+  fx.beginPath();fx.moveTo(80,160);fx.quadraticCurveTo(150,135,200,165);fx.stroke();
+  fx.beginPath();fx.moveTo(312,165);fx.quadraticCurveTo(362,135,432,160);fx.stroke();
+  fx.fillStyle='#ffffff';
+  fx.beginPath();fx.ellipse(145,225,58,48,0,0,Math.PI*2);fx.fill();
+  fx.beginPath();fx.ellipse(367,225,58,48,0,0,Math.PI*2);fx.fill();
+  fx.fillStyle=eyeColor;
+  fx.beginPath();fx.arc(150,225,32,0,Math.PI*2);fx.arc(362,225,32,0,Math.PI*2);fx.fill();
+  fx.fillStyle='#0f172a';
+  fx.beginPath();fx.arc(150,225,18,0,Math.PI*2);fx.arc(362,225,18,0,Math.PI*2);fx.fill();
+  fx.fillStyle='#ffffff';
+  fx.beginPath();fx.arc(140,215,9,0,Math.PI*2);fx.arc(352,215,9,0,Math.PI*2);fx.fill();
+  fx.fillStyle='rgba(180,83,9,0.25)';
+  fx.beginPath();fx.ellipse(256,310,14,8,0,0,Math.PI*2);fx.fill();
+  fx.strokeStyle='#9f1239';fx.lineWidth=7;fx.beginPath();
+  fx.arc(256,365,36,0.15*Math.PI,0.85*Math.PI);fx.stroke();
+  return new THREE.CanvasTexture(fc);
+}
+
+function buildPixarCharacter(id, name, role, hasTrolley=false){
+  const g=new THREE.Group();
+  let skinTone='#fcd5b8', eyeColor='#2563eb', hairColor='#2b1810';
+  let shirtColor='#3b82f6', pantsColor='#1e293b', shoeColor='#ffffff';
+
+  if(id===1){ skinTone='#fbd2a4';eyeColor='#1e293b';hairColor='#18181b';shirtColor='#ea580c';pantsColor='#18181b';shoeColor='#f97316';}
+  else if(id===2){ skinTone='#fed7aa';eyeColor='#0284c7';hairColor='#451a03';shirtColor='#ef4444';pantsColor='#3b82f6';shoeColor='#ffffff';}
+  else if(id===3){ skinTone='#fde2d0';eyeColor='#059669';hairColor='#1e293b';shirtColor='#84a98c';pantsColor='#52796f';shoeColor='#f472b6';}
+  else if(id===4){ skinTone='#fed7aa';eyeColor='#0f172a';hairColor='#5c3a21';shirtColor='#38bdf8';pantsColor='#2563eb';shoeColor='#ffffff';}
+
+  const skinMat=L({color:skinTone}),shirtMat=L({color:shirtColor}),pantsMat=L({color:pantsColor}),shoesMat=L({color:shoeColor}),hairMat=L({color:hairColor});
+  const faceTex=createPixarFaceTexture(id===3?'girl':'boy', eyeColor, skinTone);
+  const faceMat=new THREE.MeshLambertMaterial({map:faceTex});
+
+  const neck=new THREE.Mesh(new THREE.CylinderGeometry(.075,.085,.16,12),skinMat);neck.position.set(0,1.35,0);g.add(neck);
+  const headGeo=new THREE.CylinderGeometry(.19,.16,.36,16);
+  const headMats=[skinMat,skinMat,faceMat,skinMat,skinMat,skinMat];
+  const head=new THREE.Mesh(headGeo,headMats);
+  head.position.set(0,1.55,0);head.rotation.y=Math.PI/2;g.add(head);
+
+  if(id===1){
+    const hairBase=new THREE.Mesh(new THREE.SphereGeometry(.22,14,10,0,Math.PI*2,0,Math.PI/1.7),hairMat);hairBase.position.set(0,1.66,-.02);g.add(hairBase);
+    for(let i=0;i<7;i++){
+      const spike=new THREE.Mesh(new THREE.ConeGeometry(.06,.18,6),hairMat);
+      spike.position.set(-.1+i*.035,1.82+.01*(i%2),-.04+Math.sin(i)*.03);spike.rotation.x=.3;g.add(spike);
+    }
+    const gm=L({color:'#09090b'});
+    const rimL=new THREE.Mesh(new THREE.BoxGeometry(.15,.12,.03),gm);rimL.position.set(-.09,1.56,.19);g.add(rimL);
+    const rimR=new THREE.Mesh(new THREE.BoxGeometry(.15,.12,.03),gm);rimR.position.set(.09,1.56,.19);g.add(rimR);
+    const bridge=new THREE.Mesh(new THREE.BoxGeometry(.06,.02,.02),gm);bridge.position.set(0,1.58,.19);g.add(bridge);
+  } else if(id===2){
+    const hair=new THREE.Mesh(new THREE.SphereGeometry(.22,14,12,0,Math.PI*2,0,Math.PI/1.7),hairMat);hair.position.set(0,1.65,-.01);hair.rotation.z=-.2;g.add(hair);
+  } else if(id===3){
+    const hairTop=new THREE.Mesh(new THREE.SphereGeometry(.24,16,14,0,Math.PI*2,0,Math.PI/1.6),hairMat);hairTop.position.set(0,1.66,-.02);g.add(hairTop);
+    const hairBack=new THREE.Mesh(new THREE.CylinderGeometry(.12,.22,.65,10),hairMat);hairBack.position.set(0,1.3,-.18);hairBack.rotation.x=.35;g.add(hairBack);
+  } else if(id===4){
+    const hairBase=new THREE.Mesh(new THREE.SphereGeometry(.23,14,12,0,Math.PI*2,0,Math.PI/1.65),hairMat);hairBase.position.set(0,1.66,-.01);g.add(hairBase);
+    for(let f=0;f<8;f++){
+      const curl=new THREE.Mesh(new THREE.DodecahedronGeometry(.065),hairMat);
+      curl.position.set(-.12+f*.035,1.79+Math.sin(f)*.02,.02);g.add(curl);
+    }
+  }
+
+  const chest=new THREE.Mesh(new THREE.BoxGeometry(.46,.45,.28),shirtMat);chest.position.set(0,1.12,0);g.add(chest);
+  g.chestRef=chest;
+
+  if(id===1){
+    const inner=new THREE.Mesh(new THREE.BoxGeometry(.18,.45,.02),L({color:'#0f172a'}));inner.position.set(0,1.12,.14);g.add(inner);
+    const stringL=new THREE.Mesh(new THREE.CylinderGeometry(.01,.01,.18),L({color:'#ef4444'}));stringL.position.set(-.05,1.06,.16);g.add(stringL);
+    const stringR=new THREE.Mesh(new THREE.CylinderGeometry(.01,.01,.18),L({color:'#ef4444'}));stringR.position.set(.05,1.06,.16);g.add(stringR);
+  } else if(id===2){
+    const collar=new THREE.Mesh(new THREE.TorusGeometry(.11,.02,8,16),L({color:'#ffffff'}));collar.position.set(0,1.33,0);collar.rotation.x=Math.PI/2;g.add(collar);
+  } else if(id===3){
+    const btn=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.02,12),L({color:'#3f2e18'}));btn.position.set(0,1.12,.15);btn.rotation.x=Math.PI/2;g.add(btn);
+  } else if(id===4){
+    const pocket=new THREE.Mesh(new THREE.BoxGeometry(.26,.14,.04),L({color:'#0284c7'}));pocket.position.set(0,.98,.14);g.add(pocket);
+  }
+  const waist=new THREE.Mesh(new THREE.BoxGeometry(.4,.18,.26),pantsMat);waist.position.set(0,.83,0);g.add(waist);
+
+  g.arms=[-1,1].map(side=>{
+    const shoulder=new THREE.Group();shoulder.position.set(side*.26,1.26,0);
+    const armMesh=new THREE.Mesh(new THREE.CylinderGeometry(.065,.055,.44,10),shirtMat);armMesh.position.set(0,-.2,0);shoulder.add(armMesh);
+    const hand=new THREE.Mesh(new THREE.SphereGeometry(.06,8,8),skinMat);hand.position.set(0,-.44,0);shoulder.add(hand);
+    g.add(shoulder);return shoulder;
+  });
+
+  if(hasTrolley){
+    g.arms[0].rotation.set(-.58,.15,0);
+    g.arms[1].rotation.set(-.58,-.15,0);
+  }
+
+  g.legs=[-1,1].map(side=>{
+    const hip=new THREE.Group();hip.position.set(side*.125,.74,0);
+    const legMesh=new THREE.Mesh(new THREE.CylinderGeometry(.08,.07,.62,10),pantsMat);legMesh.position.set(0,-.31,0);hip.add(legMesh);
+    const shoe=new THREE.Mesh(new THREE.BoxGeometry(.135,.1,.26),shoesMat);shoe.position.set(0,-.64,.04);hip.add(shoe);
+    const sole=new THREE.Mesh(new THREE.BoxGeometry(.14,.035,.27),L({color:'#ffffff'}));sole.position.set(0,-.69,.04);hip.add(sole);
+    g.add(hip);return hip;
+  });
+
+  if(hasTrolley){
+    const trolley=createTrolley3D();
+    trolley.position.set(0,0,.68);
+    g.add(trolley);
+    g.trolley=trolley;
+
+    g.addTrolleyItem=function(itemColor){
+      if(trolley.itemsCount>=18)return;
+      const n=trolley.itemsCount;
+      const im=new THREE.Mesh(miniItemGeo,L({color:itemColor}));
+      im.position.set(-.14+(n%3)*.14, .06+Math.floor(n/6)*.12, -.18+(Math.floor((n%6)/3))*.2);
+      im.rotation.set(Math.random()*.2,n*.5,0);
+      trolley.itemsGroup.add(im);
+      trolley.itemsCount++;
+    };
+    g.clearTrolley=function(){
+      while(trolley.itemsGroup.children.length>0) trolley.itemsGroup.remove(trolley.itemsGroup.children[0]);
+      trolley.itemsCount=0;
+    };
+  }
+
+  const tc=document.createElement('canvas');tc.width=256;tc.height=68;const tx=tc.getContext('2d');
+  tx.fillStyle='rgba(15,23,42,0.85)';tx.beginPath();tx.roundRect(4,4,248,60,12);tx.fill();
+  tx.strokeStyle='#ea580c';tx.lineWidth=2;tx.stroke();
+  tx.fillStyle='#fff';tx.font='bold 24px system-ui,sans-serif';tx.textAlign='center';tx.fillText(name,128,30);
+  tx.fillStyle='#ea580c';tx.font='15px system-ui,sans-serif';tx.fillText(role,128,52);
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(tc),transparent:true}));
+  sp.scale.set(1.4,.38,1);sp.position.y=2.15;g.add(sp);g.tag=sp;
+
+  return g;
+}
+
+function animateTrolleyPush(g,T,isMoving){
+  if(isMoving){
+    const s=Math.sin(T*8.5)*.62;
+    g.legs[0].rotation.x=s;g.legs[1].rotation.x=-s;
+    g.arms[0].rotation.x=-.58+Math.sin(T*8.5)*.04;
+    g.arms[1].rotation.x=-.58-Math.sin(T*8.5)*.04;
+    g.position.y=Math.abs(Math.sin(T*8.5))*.03;
+  } else {
+    g.legs[0].rotation.x=0;g.legs[1].rotation.x=0;
+    g.arms[0].rotation.x=-.58;g.arms[1].rotation.x=-.58;
+    g.chestRef.scale.y=1+Math.sin(T*2.5)*.02;
+    g.position.y=0;
+  }
+}
+
+// Counters
+function disp(c,t,col){
+  const x=c.dc.getContext('2d');x.clearRect(0,0,256,64);x.fillStyle=col;x.fillRect(4,4,248,56);
+  x.fillStyle='#fff';x.font='900 24px system-ui,sans-serif';x.textAlign='center';x.textBaseline='middle';
+  x.fillText(t,128,34,236);c.tex.needsUpdate=true;
+}
+
+const CT=[];
+const marbleMat=L({color:'#f8fafc'}),flutedOak=L({color:'#9a6f44'}),kickMat=L({color:'#0f172a'});
+const counterConfigs=[
+  [-7,'CHECKOUT 01',false,'Hamza · Cashier'],
+  [-3.5,'CHECKOUT 02',false,'Ayesha · Cashier'],
+  [0,'CHECKOUT 03',false,'Bilal · Cashier'],
+  [6,'CHECKOUT 04 · EXPRESS',true,'Max · OrangeMart Cashier']
+];
+
+counterConfigs.forEach(([x,cname,real,cashierName],idx)=>{
+  const z=8.6,col=real?'#16a34a':'#ea580c';
+  box(2.4,.86,.88,flutedOak,x,.43,z);
+  box(2.4,.08,.84,kickMat,x,.04,z);
+  box(2.38,.02,.86,new THREE.MeshBasicMaterial({color:'#fde047'}),x,.08,z);
+  box(2.5,.08,1.02,marbleMat,x,.89,z);
+  box(.08,.89,1.02,marbleMat,x-1.21,.45,z);
+  box(1.2,.02,.4,L({color:'#18181b'}),x-.2,.94,z-.12);
+  const scr=box(.38,.24,.03,L({color:'#09090b'}),x+.8,1.15,z+.15);scr.rotation.x=-.32;
+  box(.06,.2,.06,L({color:'#52525b'}),x+.8,1,z+.12);
+
+  const sg=modernCatSign(cname,2.6,.48,col);sg.position.set(x,2.6,z);sg.rotation.y=Math.PI;S.add(sg);
+  
+  const ck=buildPixarCharacter(idx===3?1:(idx===2?2:4), cashierName, 'Store Associate', false);
+  ck.position.set(x,0,9.6);ck.rotation.y=Math.PI;S.add(ck);
+
+  const dc=document.createElement('canvas');dc.width=256;dc.height=64;
+  const tex=new THREE.CanvasTexture(dc);
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true}));
+  sp.scale.set(2,.5,1);sp.position.set(x,1.7,8.2);S.add(sp);
+
+  const c={x,z,real:!!real,ck,dc,tex,q:[],busy:0,t:0,reset:0};
+  CT.push(c);
+  disp(c,real?'CHECKOUT 04 · OPEN':'LANE OPEN',col);
+});
+
+// Gates
+const matteBlack=L({color:'#1e2229'});
+[[9.6,'ENTRANCE','#16a34a'],[3,'EXIT','#dc2626']].forEach(([x,t,c])=>{
+  const s=modernCatSign(t,2,.48,c);s.position.set(x,2.8,10.85);s.rotation.y=Math.PI;S.add(s);
+  box(1.7,2.4,.06,matteBlack,x,1.2,10.86);
+  box(1.5,2.2,.02,new THREE.MeshLambertMaterial({color:'#38bdf8',transparent:true,opacity:0.35}),x,1.2,10.87);
+});
+
+// Player Trolley
+const TR=new THREE.Group();TR.position.set(0,-.7,-1.1);cam.add(TR);
+[[.7,.04,.5,0,0,0],[.7,.3,.03,0,.15,.25],[.7,.3,.03,0,.15,-.25],[.03,.3,.5,.35,.15,0],[.03,.3,.5,-.35,.15,0],[.74,.04,.05,0,.34,.29],[.04,.6,.04,.3,-.32,.2],[.04,.6,.04,-.3,-.32,.2]].forEach(a=>{
+  const m=new THREE.Mesh(new THREE.BoxGeometry(a[0],a[1],a[2]),L({color:'#94a3b8'}));m.position.set(a[3],a[4],a[5]);TR.add(m);
+});
+const TI=[],cg=new THREE.BoxGeometry(.13,.13,.13);
+function trolleyAdd(c){const n=TI.length;if(n>=24)return;const m=new THREE.Mesh(cg,L({color:c}));m.position.set(-.24+(n%4)*.16,.09+Math.floor(n/12)*.14,-.14+(Math.floor(n/4)%3)*.14);m.rotation.y=n;TR.add(m);TI.push(m)}
+function trolleyClear(){TI.forEach(m=>TR.remove(m));TI.length=0}
+
+// Safe Navigation System
+const AISLE_X = [-9.6, -6.0, -2.0, 2.0, 6.0, 9.6];
+const CROSS_Z = [6.8, 1.25, -4.25, -9.6];
+function getClosest(val, arr){return arr.reduce((p,c)=>Math.abs(c-val)<Math.abs(p-val)?c:p)}
+
+function planSafeAislePath(n, targetX, targetZ){
+  const startAisleX = getClosest(n.x, AISLE_X);
+  const targetAisleX = getClosest(targetX, AISLE_X);
+  const crossZ = getClosest(n.z, CROSS_Z);
+  const w = [];
+  if(Math.abs(n.z - crossZ) > 0.25) w.push([startAisleX, crossZ]);
+  if(Math.abs(startAisleX - targetAisleX) > 0.25) w.push([targetAisleX, crossZ]);
+  w.push([targetAisleX, targetZ]);
+  n.wp = w;
+}
+
+const roasters=[
+  {id:1, name:'Max', role:'Shopper'},
+  {id:2, name:'Leo', role:'Shopper'},
+  {id:3, name:'Maya', role:'Shopper'},
+  {id:4, name:'Arjun', role:'Shopper'}
+];
+
+const NP=[],qz=i=>6.8-i*1.4;
+
+let PR=[], hits=[], gond=[];
+const BL=[...counterConfigs.map(c=>({x:c[0],z:8.6,hx:1.3,hz:.8}))];
+
+// CONVERT 72 FLAT PRODUCTS INTO 8 ORGANIZED DEPARTMENTS
+function organizeOrangeMartProducts(flatList){
+  const categories = [
+    { name: "Luxury Watches", emoji: "⌚", color: "#f97316", items: flatList.slice(0, 10) },
+    { name: "Audio & Bags", emoji: "🎧", color: "#3b82f6", items: flatList.slice(10, 20) },
+    { name: "Skincare & Beauty", emoji: "🧴", color: "#ec4899", items: flatList.slice(20, 30) },
+    { name: "Car Accessories", emoji: "🚗", color: "#eab308", items: flatList.slice(30, 40) },
+    { name: "Home & Kitchen", emoji: "🏡", color: "#10b981", items: flatList.slice(40, 50) },
+    { name: "Tech & Devices", emoji: "📱", color: "#6366f1", items: flatList.slice(50, 60) },
+    { name: "Lifestyle Gear", emoji: "🎒", color: "#8b5cf6", items: flatList.slice(60, 66) },
+    { name: "Gadget Essentials", emoji: "🔌", color: "#06b6d4", items: flatList.slice(66, 72) }
+  ];
+  return categories;
+}
+
+function buildStoreShelves(deptList){
+  const oakShelf=L({color:'#cb9b6d'}),ledShelfStrip=new THREE.MeshBasicMaterial({color:'#ffedd5'}),geo=new THREE.BoxGeometry(.5,.55,.5);
+  const aisles=document.getElementById('aisles');
+  aisles.innerHTML='';
+
+  deptList.forEach((dept,ci)=>{
+    const gx=-8+4*Math.floor(ci/2), gz=[3.5, -4.5][ci%2];
+    gond.push({x:gx,z:gz,hx:.95,hz:2.1});
+    BL.push({x:gx,z:gz,hx:.95,hz:2.1});
+
+    box(.08,1.85,3.5,matteBlack,gx,.92,gz);
+    box(.75,.06,3.5,oakShelf,gx,1.85,gz);
+    box(.76,.04,3.5,matteBlack,gx,1.89,gz);
+
+    const deptItems = dept.items || [];
+    [-1,1].forEach(side=>{
+      [.18,.98].forEach((ty,t)=>{
+        box(.56,.04,3.5,oakShelf,gx+side*.33,ty,gz);
+        box(.03,.02,3.48,ledShelfStrip,gx+side*.58,ty-.02,gz);
+
+        for(let vi=0;vi<Math.min(5, Math.ceil(deptItems.length/2));vi++){
+          const prodIndex = (side > 0 ? 0 : 3) + vi;
+          const prod = deptItems[prodIndex % deptItems.length] || {name: dept.name+' Item', price: 1500, image: ''};
+
+          const id=PR.length;
+          PR.push({n:prod.name, p:prod.price, e:dept.emoji, c:dept.color});
+
+          const sm=L({color:dept.color});
+          const lb=createUnsplashProductMaterial(prod.name, prod.price, prod.image, dept.color);
+          const mats=side>0?[lb,sm,sm,sm,sm,sm]:[sm,lb,sm,sm,sm,sm];
+
+          const m=new THREE.Mesh(geo,mats);
+          m.position.set(gx+side*.33, ty+.3, gz-1.36+vi*.68);
+          m.userData.id=id;
+          S.add(m);
+          hits.push(m);
+        }
+      });
+      const s=modernCatSign(dept.emoji+' '+dept.name,3,.52,dept.color);
+      s.position.set(gx+side*.9,2.5,gz);s.rotation.y=side*Math.PI/2;S.add(s);
+    });
+
+    const b=document.createElement('button');b.textContent=dept.emoji+' '+dept.name;
+    b.onclick=()=>{cam.position.set(gx+1.9,1.6,gz);yaw=Math.PI/2;pitch=-.05;closeP()};
+    aisles.appendChild(b);
+  });
+
+  [['💳 Checkout 04 (Express)',6,6.9],['🧾 Counter Lanes',-3.5,6.4]].forEach(([t,x,z])=>{
+    const b=document.createElement('button');b.textContent=t;
+    b.onclick=()=>{cam.position.set(x,1.6,z);yaw=Math.PI;pitch=-.05;closeP()};
+    aisles.appendChild(b);
+  });
+
+  initNpcShoppers();
+}
+
+// ATTEMPT TO FETCH OrangeMart_Product_Names_Prices.json, OR FALLBACK TO RAW EMBEDDED LIST
+fetch('./OrangeMart_Product_Names_Prices.json')
+  .then(res=>{
+    if(!res.ok) throw new Error("JSON file not found locally, using embedded 72 products");
+    return res.json();
+  })
+  .then(data=>{
+    const depts = organizeOrangeMartProducts(data);
+    buildStoreShelves(depts);
+  })
+  .catch(err=>{
+    console.log("Loading directly from embedded OrangeMart list:", err.message);
+    const depts = organizeOrangeMartProducts(RAW_ORANGE_MART);
+    buildStoreShelves(depts);
+  });
+
+function nextShelf(n){
+  if(!gond.length) return;
+  const k=Math.floor(Math.random()*gond.length);
+  const targetGondola = gond[k];
+  const sideOffset = (targetGondola.x >= 6) ? -1.6 : 1.6;
+  const safeWalkX = targetGondola.x + sideOffset;
+  planSafeAislePath(n, safeWalkX, targetGondola.z);
+}
+
+function initNpcShoppers(){
+  roasters.forEach((ch,i)=>{
+    const g=buildPixarCharacter(ch.id, ch.name, ch.role, true);
+    g.visible=false;S.add(g);
+    NP.push({g,x:9.6,z:10.5,wp:[],st:'wait',t:1+i*2.2,n:0,k:0,sum:0,ct:null,stuckTimer:0,lastX:9.6,lastZ:10.5});
+  });
+}
+
+function npcTick(n,dt,T){
+  const g=n.g;
+  if(n.st==='wait'){
+    n.t-=dt;
+    if(n.t<=0){
+      n.st='shop';n.n=2+Math.floor(Math.random()*3);n.k=0;n.sum=0;
+      g.visible=true;g.clearTrolley();n.x=9.6;n.z=10.5;g.position.set(n.x,0,n.z);
+      nextShelf(n);
+    }
+    return;
+  }
+
+  let steerX = 0, steerZ = 0, speedMultiplier = 1.0;
+  for(const other of NP){
+    if(other === n || !other.g.visible) continue;
+    const dist = Math.hypot(n.x - other.x, n.z - other.z);
+    if(dist < 1.5 && dist > 0.05){
+      const pushStrength = (1.5 - dist) * 1.8;
+      steerX += ((n.x - other.x) / dist) * pushStrength;
+      steerZ += ((n.z - other.z) / dist) * pushStrength;
+      if(n.wp.length > 0){
+        const [tx, tz] = n.wp[0];
+        const dot = (tx - n.x)*(other.x - n.x) + (tz - n.z)*(other.z - n.z);
+        if(dot > 0){ steerX += 0.45; speedMultiplier = 0.65; }
+      }
+    }
+  }
+
+  const movedDist = Math.hypot(n.x - n.lastX, n.z - n.lastZ);
+  if(movedDist < 0.05 * dt){
+    n.stuckTimer += dt;
+    if(n.stuckTimer > 1.8){
+      n.stuckTimer = 0;
+      if(n.st === 'shop' || n.st === 'queue') nextShelf(n);
+    }
+  } else { n.stuckTimer = 0; }
+  n.lastX = n.x; n.lastZ = n.z;
+
+  let mv = 0;
+  if(n.wp.length){
+    const [tx,tz]=n.wp[0];
+    let dx = (tx - n.x) + steerX * 0.4;
+    let dz = (tz - n.z) + steerZ * 0.4;
+    const d = Math.hypot(dx,dz);
+
+    if(d < 0.12){
+      n.x = tx; n.z = tz; n.wp.shift();
+    } else {
+      const step = Math.min(d, 1.85 * dt * speedMultiplier);
+      n.x += (dx / d) * step;
+      n.z += (dz / d) * step;
+      g.rotation.y = Math.atan2(dx, dz);
+      mv = 1;
+    }
+  }
+
+  g.position.x = n.x;
+  g.position.z = n.z;
+  animateTrolleyPush(g,T,mv);
+  if(n.wp.length) return;
+
+  if(n.st==='shop'){
+    n.st='pick';n.t=1.4;g.rotation.y=-Math.PI/2;
+    g.arms[1].rotation.set(-1.1,.6,0);
+  }
+  else if(n.st==='pick'){
+    n.t-=dt;
+    if(n.t<=0 && PR.length){
+      n.k++;
+      const randomProd=PR[Math.floor(Math.random()*PR.length)];
+      n.sum+=randomProd.p;
+      g.addTrolleyItem(randomProd.c);
+      g.arms[1].rotation.set(-.58,-.15,0);
+      if(n.k<n.n){n.st='shop';nextShelf(n)}else n.st='toCounter';
+    }
+  }
+  else if(n.st==='toCounter'){
+    const c=CT.filter(c=>!c.real&&c.q.length<3).sort((a,b)=>a.q.length-b.q.length)[0];
+    if(c){
+      n.ct=c;c.q.push(n);n.st='queue';
+      planSafeAislePath(n, c.x, qz(c.q.length-1));
+    }
+  }
+  else if(n.st==='queue'){
+    const c=n.ct;g.rotation.y=0;
+    if(c.q[0]===n&&!c.busy){c.busy=1;c.t=0;n.st='bill';disp(c,'SCANNING ITEMS…','#f59f00')}
+  }
+  else if(n.st==='bill'){
+    const c=n.ct;c.t+=dt;
+    if(c.t>2.8){
+      disp(c,'COD: PKR '+n.sum,'#16a34a');c.busy=0;c.reset=2.5;c.q.shift();
+      c.q.forEach((m,i)=>planSafeAislePath(m,c.x,qz(i)));
+      n.st='exit';
+      planSafeAislePath(n, 3, 10.6);
+    }
+  }
+  else if(n.st==='exit'){g.visible=false;n.st='wait';n.t=2+Math.random()*4}
+}
+
+// User Controls
+let yaw=Math.PI,pitch=-.05;const keys={f:0,b:0,l:0,r:0};
+document.querySelectorAll('#pad [data-k]').forEach(b=>{
+  const k=b.dataset.k;
+  b.addEventListener('pointerdown',e=>{keys[k]=1;e.preventDefault()});
+  ['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>keys[k]=0));
+});
+const map={KeyW:'f',ArrowUp:'f',KeyS:'b',ArrowDown:'b',KeyA:'l',ArrowLeft:'l',KeyD:'r',ArrowRight:'r'};
+addEventListener('keydown',e=>{if(map[e.code])keys[map[e.code]]=1});
+addEventListener('keyup',e=>{if(map[e.code])keys[map[e.code]]=0});
+
+let drag=null;
+canvas.addEventListener('pointerdown',e=>{drag={id:e.pointerId,x:e.clientX,y:e.clientY,sx:e.clientX,sy:e.clientY,t:performance.now()};canvas.setPointerCapture(e.pointerId)});
+canvas.addEventListener('pointermove',e=>{
+  if(!drag||e.pointerId!==drag.id)return;
+  yaw-=(e.clientX-drag.x)*.005;pitch-=(e.clientY-drag.y)*.005;
+  pitch=Math.max(-1.1,Math.min(1.1,pitch));drag.x=e.clientX;drag.y=e.clientY;
+});
+canvas.addEventListener('pointerup',e=>{
+  if(!drag||e.pointerId!==drag.id)return;
+  const mv=Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy),dt=performance.now()-drag.t;
+  if(mv<8&&dt<350)tap(e.clientX,e.clientY);
+  drag=null;
+});
+
+const ray=new THREE.Raycaster();
+function tap(px,py){
+  closeP();
+  ray.setFromCamera({x:px/innerWidth*2-1,y:-(py/innerHeight)*2+1},cam);
+  const h=ray.intersectObjects(hits)[0];
+  if(h&&h.distance<9)add(h.object.userData.id);
+}
+
+// Cart Management
+const cart={};
+const panel=document.getElementById('panel'),aisles=document.getElementById('aisles'),btn=document.getElementById('cartBtn'),toast=document.getElementById('toast');
+let tt;
+function add(i){
+  cart[i]=(cart[i]||0)+1;render();trolleyAdd(PR[i].c);
+  toast.textContent='✅ Added '+PR[i].n+' · PKR '+PR[i].p;toast.style.opacity=1;
+  clearTimeout(tt);tt=setTimeout(()=>toast.style.opacity=0,1100);
+}
+function render(){
+  let n=0,t=0,h='';
+  for(const i in cart){n+=cart[i];t+=cart[i]*PR[i].p;h+=`<div class="row"><span>${PR[i].e} ${PR[i].n} × ${cart[i]}</span><b>PKR ${cart[i]*PR[i].p}</b></div>`}
+  btn.textContent=`🛒 ${n} · PKR ${t}`;
+  panel.innerHTML=(h||'<div class="row">Cart is empty</div>')+(n?`<div class="row"><b>Total Amount</b><b>PKR ${t}</b></div><button id="clr">Empty Cart</button>`:'');
+  const c=document.getElementById('clr');if(c)c.onclick=()=>{for(const k in cart)delete cart[k];render();trolleyClear()};
+}
+function closeP(){panel.style.display='none';aisles.style.display='none'}
+btn.onclick=()=>{const o=panel.style.display==='block';closeP();if(!o)panel.style.display='block'};
+document.getElementById('aBtn').onclick=()=>{const o=aisles.style.display==='grid';closeP();if(!o)aisles.style.display='grid'};
+
+// Billing, Cash on Delivery & PDF Download
+const bill=document.getElementById('bill'),bc=document.getElementById('bc'),billBtn=document.getElementById('billBtn');
+let billTok=0,billNo=94210;
+function closeBill(){billTok++;bill.style.display='none';const r=CT[3];if(r.busy){r.busy=0;disp(r,'CHECKOUT 04 · OPEN','#16a34a')}}
+
+function generatePdfInvoice(purchasedItems, sub, gst, total, invoiceNumber, dateString){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFillColor(15, 23, 42);
+  doc.rect(0, 0, 210, 36, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(22);
+  doc.setFont('helvetica', 'bold');
+  doc.text('ORANGE MART', 14, 18);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Smart Retail Superstore · Official Tax Invoice', 14, 26);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(249, 115, 22);
+  doc.text('PAYMENT: CASH ON DELIVERY', 140, 26);
+
+  doc.setTextColor(30, 41, 59);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Invoice No: INV-${invoiceNumber}`, 14, 46);
+  doc.text(`Date & Time: ${dateString}`, 14, 52);
+  doc.text(`Billing Type: Cash on Delivery (COD)`, 14, 58);
+  doc.text(`Counter: Checkout Lane 04 (Express)`, 14, 64);
+
+  doc.setFillColor(241, 245, 249);
+  doc.rect(14, 70, 182, 8, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.text('Item Description', 18, 75);
+  doc.text('Qty', 110, 75);
+  doc.text('Price (PKR)', 135, 75);
+  doc.text('Total (PKR)', 165, 75);
+
+  doc.setFont('helvetica', 'normal');
+  let y = 84;
+  purchasedItems.forEach(it => {
+    doc.text(it.n.slice(0,30), 18, y);
+    doc.text(String(it.q), 112, y);
+    doc.text(`${it.p}`, 138, y);
+    doc.text(`${it.q * it.p}`, 168, y);
+    y += 7;
+  });
+
+  y += 4;
+  doc.setDrawColor(203, 213, 225);
+  doc.line(14, y, 196, y);
+  y += 8;
+  doc.text('Subtotal:', 125, y);
+  doc.text(`PKR ${sub}`, 165, y);
+  y += 6;
+  doc.text('Sales Tax (5%):', 125, y);
+  doc.text(`PKR ${gst}`, 165, y);
+  y += 8;
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.text('Net Total (COD):', 115, y);
+  doc.text(`PKR ${total}`, 165, y);
+
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'italic');
+  doc.setTextColor(100, 116, 139);
+  doc.text('Payment terms: Cash on Delivery. Please pay exact cash at reception/delivery. Shukriya!', 14, y + 20);
+
+  doc.save(`OrangeMart_Invoice_INV-${invoiceNumber}.pdf`);
+}
+
+function pay(sub,tok,ft,purchasedItems){
+  const gst=Math.round(sub*.05),tot=sub+gst;
+  ft.innerHTML=`
+    <div class='r'><span>Subtotal</span><b>PKR ${sub}</b></div>
+    <div class='r'><span>Sales Tax (5%)</span><b>PKR ${gst}</b></div>
+    <div class='r' style='font-size:16px;border-top:2px solid #0f172a;padding-top:6px'><b>Net Total Amount</b><b>PKR ${tot}</b></div>
+    <div style='margin-top:12px;font-weight:700;color:#0f172a'>Payment Mode:</div>
+    <button id='codBtn' style='width:100%;background:#ea580c;margin-top:6px;font-size:15px'>💵 Confirm Cash on Delivery (COD)</button>
+    <div style='font-size:11px;color:#64748b;margin-top:4px;text-align:center'>Only Cash on Delivery is available for this store.</div>
+    <button id='cx' style='width:100%;margin-top:8px'>Cancel</button>
+  `;
+
+  document.getElementById('codBtn').onclick=()=>{
+    ft.innerHTML='<div style="padding:14px 0;font-weight:700;color:#ea580c">⏳ Confirming Cash on Delivery Order…</div>';
+    setTimeout(()=>{
+      if(tok!==billTok)return;billNo++;
+      const now = new Date();
+      const dateStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      
+      ft.innerHTML=`
+        <div class='r' style='background:#fff7ed;padding:8px;border-radius:8px;color:#ea580c'><b>✅ CASH ON DELIVERY ORDER PLACED</b></div>
+        <div class='r'><span>Invoice Number</span><b>INV-${billNo}</b></div>
+        <div class='r'><span>Payment Method</span><b>Cash on Delivery (COD)</b></div>
+        <div class='r'><span>Amount Payable</span><b>PKR ${tot}</b></div>
+        <div class='r'><span>Order Time</span><b>${dateStr}</b></div>
+        <button id='dlPdf' style='width:100%;background:#0284c7;margin-top:12px;font-size:14px'>📥 Download Invoice (PDF)</button>
+        <button id='dn' style='width:100%;margin-top:8px'>Done / Close</button>
+      `;
+
+      document.getElementById('dlPdf').onclick=()=>{
+        generatePdfInvoice(purchasedItems, sub, gst, tot, billNo, dateStr);
+      };
+
+      for(const k in cart)delete cart[k];render();trolleyClear();
+      const r=CT[3];r.busy=0;r.reset=4;disp(r,'COD: PKR '+tot,'#16a34a');
+      document.getElementById('dn').onclick=closeBill;
+    },1000);
+  };
+  document.getElementById('cx').onclick=closeBill;
+}
+
+billBtn.onclick=()=>{
+  const ids=Object.keys(cart);if(!ids.length)return;
+  const tok=++billTok;bill.style.display='flex';CT[3].busy=1;disp(CT[3],'SCANNING ITEMS…','#f59f00');
+  bc.innerHTML=`
+    <div style='text-align:center;border-bottom:2px solid #ea580c;padding-bottom:6px;margin-bottom:8px'>
+      <b style='font-size:16px;color:#ea580c'>ORANGE MART</b>
+      <div style='font-size:11px;color:#64748b'>TAX INVOICE · CASH ON DELIVERY ONLY</div>
+      <div style='font-size:12px;font-weight:600;margin-top:2px'>CHECKOUT LANE 04 (EXPRESS)</div>
+    </div>
+    <div id='rows'></div>
+    <div id='ft' style='margin-top:10px'><button id='cx'>Cancel</button></div>
+  `;
+  const rows=document.getElementById('rows'),ft=document.getElementById('ft');
+  document.getElementById('cx').onclick=closeBill;
+  let sub=0;const gap=Math.min(350,2800/ids.length);
+  const purchasedItems=[];
+
+  ids.forEach((id,k)=>setTimeout(()=>{
+    if(tok!==billTok)return;
+    const q=cart[id],a=q*PR[id].p;sub+=a;
+    purchasedItems.push({n:PR[id].n, q, p:PR[id].p});
+    rows.insertAdjacentHTML('beforeend',`<div class='r'><span>${PR[id].e} ${PR[id].n} ×${q}</span><b>PKR ${a}</b></div>`);
+    if(k===ids.length-1)setTimeout(()=>{if(tok===billTok)pay(sub,tok,ft,purchasedItems)},400);
+  },k*gap+200));
+};
+
+function tick(dt){
+  const T=clock.elapsedTime;
+  NP.forEach(n=>npcTick(n,dt,T));
+  CT.forEach(c=>{
+    c.ck.arms[1].rotation.x=c.busy?-0.9+Math.sin(T*10)*.35:Math.sin(T*2)*.05;
+    if(c.reset>0){c.reset-=dt;if(c.reset<=0&&!c.busy)disp(c,c.real?'CHECKOUT 04 · OPEN':'LANE OPEN',c.real?'#16a34a':'#ea580c')}
+  });
+  const p=cam.position,near=Math.hypot(p.x-6,p.z-7.2)<2.8&&bill.style.display!=='flex';
+  billBtn.style.display=near?'block':'none';
+  if(near){const w=Object.keys(cart).length?'💳 Proceed to Checkout':'💳 Cart is empty';if(billBtn.textContent!==w)billBtn.textContent=w}
+}
+
+setTimeout(()=>document.getElementById('hint').style.opacity=0,8000);
+
+// Physics & Loop
+const blocked=(x,z)=>BL.some(g=>Math.abs(x-g.x)<g.hx&&Math.abs(z-g.z)<g.hz);
+const clock=new THREE.Clock();
+
+function loop(){
+  const dt=Math.min(clock.getDelta(),.05),sp=3.2*dt;
+  const f=keys.f-keys.b,r=keys.r-keys.l,p=cam.position;
+  const nx=p.x+(-Math.sin(yaw)*f+Math.cos(yaw)*r)*sp,nz=p.z+(-Math.cos(yaw)*f-Math.sin(yaw)*r)*sp;
+  if(!blocked(nx,p.z))p.x=nx;
+  if(!blocked(p.x,nz))p.z=nz;
+  p.x=Math.max(-10,Math.min(10,p.x));p.z=Math.max(-11,Math.min(10.5,p.z));
+  cam.rotation.set(pitch,yaw,0);
+  tick(dt);
+  R.render(S,cam);
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
