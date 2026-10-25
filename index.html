@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ORANGE MART 3D - Smart Superstore</title>
+<title>ORANGE MART 3D - Mega Hypermart & Customer Care</title>
 <style>
-html,body{margin:0;height:100%;overflow:hidden;background:#0f172a;font-family:system-ui,-apple-system,sans-serif;touch-action:none;-webkit-user-select:none;user-select:none;color:#fff}
+html,body{margin:0;height:100%;overflow:hidden;background:#0b0f19;font-family:system-ui,-apple-system,sans-serif;touch-action:none;-webkit-user-select:none;user-select:none;color:#fff}
 canvas{display:block;width:100%;height:100%}
 #top{position:fixed;left:0;right:0;top:0;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 0;display:flex;justify-content:space-between;align-items:center;gap:8px;pointer-events:none;z-index:10}
 #brand{background:linear-gradient(135deg,#c2410c,#ea580c);border:1px solid rgba(255,255,255,0.25);padding:8px 14px;border-radius:14px;font-weight:700;font-size:14px;line-height:1.2;box-shadow:0 8px 24px rgba(234,88,12,0.4);backdrop-filter:blur(10px)}
@@ -23,18 +23,39 @@ canvas{display:block;width:100%;height:100%}
 #pad{position:fixed;left:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);display:grid;grid-template-columns:repeat(3,56px);grid-template-rows:repeat(2,56px);gap:6px;z-index:10}
 #pad div{background:rgba(15,23,42,.75);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;touch-action:none;user-select:none;backdrop-filter:blur(8px)}
 #pad div:active{background:#f97316;color:#0f172a}
+
+/* DIALOGUE & INTERACTION MODAL (SALESMAN & MANAGER) */
+#dialogModal{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);left:50%;transform:translateX(-50%);width:min(440px,94vw);background:rgba(15,23,42,0.98);border:2px solid #ea580c;border-radius:18px;padding:16px;box-shadow:0 16px 40px rgba(0,0,0,0.85);z-index:40;display:none;backdrop-filter:blur(14px)}
+#dialogHeader{display:flex;align-items:center;gap:10px;border-bottom:1px solid #334155;padding-bottom:10px;margin-bottom:10px}
+#dialogAvatar{font-size:32px;background:#1e293b;border-radius:12px;padding:4px 8px}
+#dialogTitle{font-size:15px;font-weight:700;color:#fff}
+#dialogSubtitle{font-size:11px;color:#f97316;font-weight:600}
+#dialogText{font-size:13.5px;line-height:1.45;color:#e2e8f0;margin-bottom:12px;background:#1e293b;padding:10px 12px;border-radius:10px;max-height:160px;overflow-y:auto}
+#dialogOptions{display:flex;flex-direction:column;gap:6px}
+.dlgBtn{background:#0f172a;border:1px solid #475569;color:#fff;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;cursor:pointer;transition:background .2s}
+.dlgBtn:hover{background:#ea580c;border-color:#ea580c}
+.dlgBuyBtn{background:linear-gradient(135deg,#16a34a,#15803d)!important;border-color:#16a34a!important;color:#fff!important;font-weight:700!important}
+#dlgCloseBtn{background:#334155;text-align:center;margin-top:4px}
+
+/* FLOATING PROMPT BUTTON */
+#talkPromptBtn{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 95px);transform:translateX(-50%);background:#ea580c;color:#fff;border:none;padding:10px 20px;border-radius:24px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(234,88,12,0.5);display:none;z-index:35}
+
 #bill{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;z-index:50;backdrop-filter:blur(6px)}
-#bc{background:#ffffff;color:#0f172a;border-radius:18px;width:min(350px,100%);max-height:82%;overflow:auto;padding:18px;font-size:14px;box-shadow:0 20px 40px rgba(0,0,0,0.4)}
+#bc{background:#ffffff;color:#0f172a;border-radius:18px;width:min(380px,100%);max-height:86%;overflow:auto;padding:18px;font-size:14px;box-shadow:0 20px 40px rgba(0,0,0,0.4)}
 #bc .r{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed #cbd5e1}
 #bc button{background:#ea580c;color:#fff;border:0;border-radius:10px;padding:11px 14px;font-weight:700;margin:8px 4px 0 0;cursor:pointer}
 #billBtn{position:fixed;right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 30px);font-size:15px;padding:14px 20px;z-index:10;background:linear-gradient(135deg,#16a34a,#15803d);border:none;box-shadow:0 8px 24px rgba(22,163,74,0.4)}
+
+/* FORM INPUTS FOR CUSTOMER DETAILS */
+.custInput{width:100%;box-sizing:border-box;padding:9px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;margin-bottom:8px;outline:none}
+.custInput:focus{border-color:#ea580c}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <canvas id="c"></canvas>
 <div id="top">
-  <div id="brand">🛒 ORANGE MART 3D<small>OrangeMart Live Catalog · COD Only</small></div>
+  <div id="brand">🛒 ORANGE MART MEGA<small>Cash on Delivery · Manager Office & Sales Staff</small></div>
   <div>
     <button class="tb" id="aBtn">📍 Store Aisles</button> 
     <button class="tb" id="cartBtn">🛒 0 · PKR 0</button>
@@ -43,7 +64,22 @@ canvas{display:block;width:100%;height:100%}
 <div class="pn" id="aisles"></div>
 <div class="pn" id="panel"></div>
 <div id="toast"></div>
-<div id="hint">OrangeMart 72 Products Loaded! Tap products to add in trolley.</div>
+<div id="hint">OrangeMart Mega: Luxury Blue Tiles, Modern Walls, Auto Doors & Sales Assistants!</div>
+
+<button id="talkPromptBtn">💬 Baat Karein</button>
+
+<div id="dialogModal">
+  <div id="dialogHeader">
+    <div id="dialogAvatar">👔</div>
+    <div>
+      <div id="dialogTitle">Mr. Tariq</div>
+      <div id="dialogSubtitle">Store Manager</div>
+    </div>
+  </div>
+  <div id="dialogText">Assalam-o-Alaikum! Main OrangeMart ka Branch Manager hoon. Main aapki kya madad kar sakta hoon?</div>
+  <div id="dialogOptions"></div>
+</div>
+
 <div id="bill"><div id="bc"></div></div>
 <button class="tb" id="billBtn" style="display:none">💳 Proceed to Checkout</button>
 <div id="pad">
@@ -53,7 +89,12 @@ canvas{display:block;width:100%;height:100%}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// RAW 72 PRODUCTS FROM YOUR OrangeMart_Product_Names_Prices.json
+// ==========================================
+// 🔗 APNA GOOGLE SHEET WEB APP URL YAHAN PASTE KAREIN:
+// ==========================================
+const GOOGLE_SHEET_WEBAPP_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+// RAW 72 PRODUCTS FROM OrangeMart_Product_Names_Prices.json
 const RAW_ORANGE_MART = [
   {"name":"Classic Smart Watch","price":2850,"image":"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=85"},
   {"name":"Sport Digital Watch","price":3450,"image":"https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=700&q=85"},
@@ -133,54 +174,118 @@ const canvas=document.getElementById('c');
 const R=new THREE.WebGLRenderer({canvas,antialias:true});
 R.setPixelRatio(Math.min(devicePixelRatio,2));
 
+// BRIGHT DAYLIGHT STORE LIGHTING
 const S=new THREE.Scene();
-S.background=new THREE.Color('#1a1f2c');
-S.fog=new THREE.Fog('#1a1f2c',12,38);
-const cam=new THREE.PerspectiveCamera(70,1,.1,70);cam.rotation.order='YXZ';cam.position.set(3,1.6,6.4);S.add(cam);
+S.background=new THREE.Color('#dce6f5');
+S.fog=new THREE.Fog('#dce6f5',22,58);
+
+const cam=new THREE.PerspectiveCamera(70,1,.1,80);cam.rotation.order='YXZ';
+cam.position.set(-2,1.6,8.5);
+let yaw=0, pitch=-.05;
+S.add(cam);
 
 function resize(){R.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
 addEventListener('resize',resize);resize();
 
-S.add(new THREE.HemisphereLight('#f8fafc','#1e293b',1.05));
-const dl=new THREE.DirectionalLight('#fffbeb',.65);dl.position.set(4,9,4);S.add(dl);
+// Ambient Daylight Studio Lighting
+S.add(new THREE.HemisphereLight('#ffffff','#94a3b8',1.25));
+const dl=new THREE.DirectionalLight('#fffbeb',.95);dl.position.set(6,14,8);S.add(dl);
+const fillLight=new THREE.DirectionalLight('#e0f2fe',.55);fillLight.position.set(-6,10,-8);S.add(fillLight);
+
 const L=m=>new THREE.MeshLambertMaterial(m);
 const box=(w,h,d,mat,x,y,z)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);S.add(m);return m};
 
-// Floor & Room
-const fc=document.createElement('canvas');fc.width=256;fc.height=256;const fx=fc.getContext('2d');
-fx.fillStyle='#e2e8f0';fx.fillRect(0,0,256,256);
-fx.fillStyle='#cbd5e1';for(let i=0;i<120;i++){fx.beginPath();fx.arc(Math.random()*256,Math.random()*256,Math.random()*2.5+1,0,Math.PI*2);fx.fill();}
-fx.fillStyle='#94a3b8';for(let i=0;i<60;i++){fx.beginPath();fx.arc(Math.random()*256,Math.random()*256,Math.random()*1.8+0.5,0,Math.PI*2);fx.fill();}
-fx.strokeStyle='rgba(15,23,42,0.12)';fx.lineWidth=3;fx.strokeRect(0,0,256,256);
-fx.strokeStyle='rgba(234,88,12,0.3)';fx.lineWidth=1;fx.strokeRect(2,2,252,252);
-const ft=new THREE.CanvasTexture(fc);ft.wrapS=ft.wrapT=THREE.RepeatWrapping;ft.repeat.set(21/3,24/3);
-box(21,.1,24,L({map:ft,roughness:0.3}),0,-.05,-.5);
+// ✅ GLOBALLY DEFINED MATERIALS
+const matteBlack = L({color:'#181b22'});
 
-box(21,.1,24,L({color:'#141721'}),0,3.6,-.5);
+// ==========================================
+// 1. ROYAL SAPPHIRE BLUE MARBLE FLOOR (GOLD INLAYS)
+// ==========================================
+const fc=document.createElement('canvas');fc.width=512;fc.height=512;const fx=fc.getContext('2d');
+
+// Deep Sapphire Blue Marble Gradient
+const blueGrd=fx.createLinearGradient(0,0,512,512);
+blueGrd.addColorStop(0,'#0f2244');
+blueGrd.addColorStop(0.5,'#152c54');
+blueGrd.addColorStop(1,'#0d1d3a');
+fx.fillStyle=blueGrd;fx.fillRect(0,0,512,512);
+
+// Elegant Organic Marble Veins
+fx.strokeStyle='rgba(59,130,246,0.25)';fx.lineWidth=6;fx.beginPath();
+fx.moveTo(0,140);fx.bezierCurveTo(140,80,280,260,512,190);fx.stroke();
+
+fx.strokeStyle='rgba(147,197,253,0.18)';fx.lineWidth=3;fx.beginPath();
+fx.moveTo(60,0);fx.bezierCurveTo(160,210,320,310,480,512);fx.stroke();
+
+fx.strokeStyle='rgba(30,58,138,0.35)';fx.lineWidth=12;fx.beginPath();
+fx.moveTo(120,512);fx.bezierCurveTo(240,360,380,190,512,70);fx.stroke();
+
+// Luxury Champagne Gold Inlay Frame
+fx.strokeStyle='rgba(15,23,42,0.85)';fx.lineWidth=4;fx.strokeRect(0,0,512,512);
+fx.strokeStyle='rgba(245,158,11,0.7)';fx.lineWidth=3;fx.strokeRect(4,4,504,504);
+fx.strokeStyle='rgba(253,224,71,0.4)';fx.lineWidth=1;fx.strokeRect(8,8,496,496);
+
+const ft=new THREE.CanvasTexture(fc);ft.wrapS=ft.wrapT=THREE.RepeatWrapping;ft.repeat.set(36/3,38/3);
+
+// Blue Marble Floor
+box(36,.1,38,L({map:ft}),0,-.05,-.5);
+// Dark Architectural Matte Ceiling
+box(36,.1,38,L({color:'#0f1422'}),0,4.5,-.5);
+
+// Linear Suspended LED Track Lights
 const ledLightMat=new THREE.MeshBasicMaterial({color:'#ffffff'});
 const trackMat=L({color:'#18181b'});
-for(let x=-8;x<=8;x+=4){
-  box(.12,.08,20,trackMat,x,3.4,-.5);
-  for(let z=-8;z<=8;z+=5.5) box(.015,.2,.015,L({color:'#71717a'}),x,3.5,z);
-  box(.08,.03,19.6,ledLightMat,x,3.35,-.5);
+for(let x=-14;x<=14;x+=7){
+  box(.12,.08,32,trackMat,x,4.2,-.5);
+  for(let z=-14;z<=14;z+=6) box(.015,.3,.015,L({color:'#71717a'}),x,4.35,z);
+  box(.08,.03,31.6,ledLightMat,x,4.15,-.5);
 }
 
-const modernWall=L({color:'#e2e8f0'});
-box(.2,3.6,24,modernWall,-10.5,1.8,-.5);box(.2,3.6,24,modernWall,10.5,1.8,-.5);
-box(21,3.6,.2,modernWall,0,1.8,-12);box(21,3.6,.2,modernWall,0,1.8,11);
+// ==========================================
+// 2. MODERN TITANIUM SLATE WALLS & ART PAINTING
+// ==========================================
+const modernSlateWall=L({color:'#1e2538'});
+box(.25,4.5,38,modernSlateWall,-18,2.25,-.5);
+box(.25,4.5,38,modernSlateWall,18,2.25,-.5);
+box(36,4.5,.25,modernSlateWall,0,2.25,-19.5);
+box(36,4.5,.25,modernSlateWall,0,2.25,18.5);
+
+// Modern Dark Skirting Baseboard along floor
+const baseboardMat = L({color:'#0a0f1d'});
+box(36,.25,.08,baseboardMat,0,.125,-19.38);
+box(36,.25,.08,baseboardMat,0,.125,18.38);
+box(.08,.25,38,baseboardMat,-17.88,.125,-.5);
+box(.08,.25,38,baseboardMat,17.88,.125,-.5);
+
+// Modern Geometric Wall Painting Mural on Back Wall
+const muralCanvas=document.createElement('canvas');muralCanvas.width=1024;muralCanvas.height=512;const mx=muralCanvas.getContext('2d');
+mx.fillStyle='#161c2b';mx.fillRect(0,0,1024,512);
+
+// Painted Geometric Slants & Luxury Accents
+mx.fillStyle='#ea580c';mx.beginPath();mx.moveTo(0,0);mx.lineTo(240,0);mx.lineTo(160,512);mx.lineTo(0,512);mx.fill();
+mx.fillStyle='#f59f00';mx.beginPath();mx.moveTo(240,0);mx.lineTo(270,0);mx.lineTo(190,512);mx.lineTo(160,512);mx.fill();
+mx.fillStyle='#0284c7';mx.beginPath();mx.moveTo(760,0);mx.lineTo(1024,0);mx.lineTo(1024,512);mx.lineTo(840,512);mx.fill();
+mx.fillStyle='#38bdf8';mx.beginPath();mx.moveTo(730,0);mx.lineTo(760,0);mx.lineTo(840,512);mx.lineTo(810,512);mx.fill();
+
+const muralTex=new THREE.CanvasTexture(muralCanvas);
+const muralMesh=new THREE.Mesh(new THREE.PlaneGeometry(16,4.2),new THREE.MeshLambertMaterial({map:muralTex}));
+muralMesh.position.set(-6,2.2,-19.36);S.add(muralMesh);
+
+// Modern Slat Wood Panel Accents
 const woodMat=L({color:'#b48356'});
-for(let wx=-9;wx<=9;wx+=0.3) box(.14,3.6,.04,woodMat,wx,1.8,-11.88);
+for(let wx=-17;wx<=-14.5;wx+=0.35) box(.15,4.5,.04,woodMat,wx,2.25,-19.38);
+for(let wx=2.5;wx<=8;wx+=0.35) box(.15,4.5,.04,woodMat,wx,2.25,-19.38);
 
 function modernStoreSign(txt,w,h){
  const c=document.createElement('canvas');c.width=1024;c.height=Math.round(1024*h/w);const x=c.getContext('2d');
  x.fillStyle='#0f172a';x.fillRect(0,0,c.width,c.height);
  x.strokeStyle='#ea580c';x.lineWidth=8;x.strokeRect(6,6,c.width-12,c.height-12);
- x.fillStyle='#ffffff';x.font='900 64px system-ui,sans-serif';x.textAlign='center';x.textBaseline='middle';
+ x.fillStyle='#ffffff';x.font='900 60px system-ui,sans-serif';x.textAlign='center';x.textBaseline='middle';
  x.letterSpacing='3px';x.fillText(txt,c.width/2,c.height/2);
  return new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c)}));
 }
-const bs=modernStoreSign('ORANGE MART · PREMIUM STORE',8.6,1.3);
-bs.position.set(0,2.6,-11.82);S.add(bs);
+const bs=modernStoreSign('ORANGE MART · MEGA HYPERSTORE',10,1.4);
+bs.position.set(-4,3.2,-19.3);S.add(bs);
 
 function modernCatSign(txt,w,h,accent='#ea580c'){
  const c=document.createElement('canvas');c.width=512;c.height=Math.round(512*h/w);const x=c.getContext('2d');
@@ -191,17 +296,92 @@ function modernCatSign(txt,w,h,accent='#ea580c'){
  return new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c)}));
 }
 
-// REAL PHOTO TEXTURE GENERATOR FOR UNSPLASH IMAGES
+// ==========================================
+// 3. AUTOMATIC SENSOR SLIDING GLASS DOORS
+// ==========================================
+const doorFrameMat = L({color:'#18181b'});
+const doorGlassMat = new THREE.MeshLambertMaterial({color:'#38bdf8',transparent:true,opacity:0.45});
+
+box(4.4,3.2,.12,doorFrameMat,10,1.6,18.35);
+const doorSensorLight = box(.3,.08,.08,new THREE.MeshBasicMaterial({color:'#ef4444'}),10,3.2,18.25);
+
+const doorLeft = new THREE.Mesh(new THREE.BoxGeometry(1.6,2.8,.04),doorGlassMat);
+doorLeft.position.set(9.2,1.45,18.35);S.add(doorLeft);
+const doorRight = new THREE.Mesh(new THREE.BoxGeometry(1.6,2.8,.04),doorGlassMat);
+doorRight.position.set(10.8,1.45,18.35);S.add(doorRight);
+
+const entranceSign = modernCatSign('AUTOMATIC ENTRANCE · SENSOR',3,.45,'#16a34a');
+entranceSign.position.set(10,3.45,18.25);S.add(entranceSign);
+
+let doorState = { open: false, progress: 0 };
+
+function updateAutoDoors(dt, playerDist){
+  if(playerDist < 4.2){
+    doorState.open = true;
+    doorSensorLight.material.color.set('#16a34a');
+  } else {
+    doorState.open = false;
+    doorSensorLight.material.color.set('#ef4444');
+  }
+  const targetProgress = doorState.open ? 1.0 : 0.0;
+  doorState.progress += (targetProgress - doorState.progress) * dt * 4.0;
+
+  doorLeft.position.x = 9.2 - doorState.progress * 1.35;
+  doorRight.position.x = 10.8 + doorState.progress * 1.35;
+}
+
+const exitSign = modernCatSign('STORE EXIT',2,.45,'#dc2626');
+exitSign.position.set(2,3.45,18.25);S.add(exitSign);
+box(2.2,3.2,.08,doorFrameMat,2,1.6,18.35);
+
+// ==========================================
+// 4. DEDICATED MANAGER GLASS OFFICE
+// ==========================================
+const BL=[];
+const glassMat=new THREE.MeshLambertMaterial({color:'#38bdf8',transparent:true,opacity:0.35});
+const officeFrameMat=L({color:'#18181b'});
+
+box(.1,3.2,4.8,glassMat,10,1.6,-16.6);
+box(.15,3.2,.15,officeFrameMat,10,1.6,-14.2);
+box(.15,3.2,.15,officeFrameMat,10,1.6,-12);
+box(.15,.15,7.2,officeFrameMat,10,3.2,-15.5);
+BL.push({x:10,z:-16.6,hx:.3,hz:2.5});
+
+box(7.5,3.2,.1,glassMat,13.75,1.6,-12);
+box(7.5,.15,.15,officeFrameMat,13.75,3.2,-12);
+BL.push({x:13.75,z:-12,hx:3.8,hz:.3});
+
+const offSign=modernCatSign('👔 MANAGER OFFICE · CUSTOMER SUPPORT',4.5,.65,'#38bdf8');
+offSign.position.set(13.75,3.6,-11.9);S.add(offSign);
+
+// Office Furniture
+box(2.4,.85,1.2,L({color:'#451a03'}),14,.42,-15.8);
+box(2.5,.06,1.3,L({color:'#78350f'}),14,.86,-15.8);
+BL.push({x:14,z:-15.8,hx:1.4,hz:.8});
+
+box(.4,.02,.3,L({color:'#94a3b8'}),14,.9,-15.8);
+const laptopScr=box(.4,.26,.02,L({color:'#09090b'}),14,1.03,-15.94);laptopScr.rotation.x=.2;
+
+box(.6,.7,.6,L({color:'#0f172a'}),14,.55,-17);
+box(.5,.6,.12,L({color:'#0f172a'}),14,.9,-17.3);
+
+[-.6,.6].forEach(vx=>{
+  box(.5,.5,.5,L({color:'#334155'}),14+vx,.38,-14.6);
+  box(.5,.5,.08,L({color:'#334155'}),14+vx,.68,-14.4);
+});
+
+box(.5,.6,.5,L({color:'#e2e8f0'}),11.2,.3,-18.2);
+const leaves=new THREE.Mesh(new THREE.DodecahedronGeometry(.45),L({color:'#16a34a'}));
+leaves.position.set(11.2,1,-18.2);S.add(leaves);
+
+// REAL PHOTO MATERIAL CREATOR
 function createUnsplashProductMaterial(name, price, imgUrl, accentColor){
   const c=document.createElement('canvas');c.width=256;c.height=300;const x=c.getContext('2d');
   const tex=new THREE.CanvasTexture(c);
 
   function draw(img=null){
     x.fillStyle='#ffffff';x.fillRect(0,0,256,300);
-    // Top Color Accent
     x.fillStyle=accentColor||'#ea580c';x.fillRect(0,0,256,12);
-
-    // Draw Unsplash Photo
     if(img && img.complete && img.naturalWidth > 0){
       x.drawImage(img,14,18,228,180);
     } else {
@@ -209,11 +389,7 @@ function createUnsplashProductMaterial(name, price, imgUrl, accentColor){
       x.fillStyle='#64748b';x.font='bold 22px system-ui,sans-serif';x.textAlign='center';
       x.fillText('OrangeMart',128,110);
     }
-
-    // Border
     x.strokeStyle='#e2e8f0';x.lineWidth=2;x.strokeRect(14,18,228,180);
-
-    // Product Title
     x.fillStyle='#0f172a';x.textAlign='center';x.textBaseline='middle';
     if(name.length > 22){
       x.font='bold 14px system-ui,sans-serif';
@@ -223,28 +399,20 @@ function createUnsplashProductMaterial(name, price, imgUrl, accentColor){
       x.font='bold 17px system-ui,sans-serif';
       x.fillText(name,128,232);
     }
-
-    // PKR Price Tag
-    x.fillStyle='#ea580c';
-    x.font='900 20px system-ui,sans-serif';
+    x.fillStyle='#ea580c';x.font='900 20px system-ui,sans-serif';
     x.fillText('PKR '+price,128,276);
     tex.needsUpdate=true;
   }
-
   draw(null);
-
   if(imgUrl){
-    const img=new Image();
-    img.crossOrigin="anonymous";
-    img.onload=()=>draw(img);
-    img.onerror=()=>draw(null);
+    const img=new Image();img.crossOrigin="anonymous";
+    img.onload=()=>draw(img);img.onerror=()=>draw(null);
     img.src=imgUrl;
   }
-
   return L({map:tex});
 }
 
-// 3D Trolley Builder
+// 3D Trolley Generator
 const metalMat=L({color:'#cbd5e1'}),wheelMat=L({color:'#18181b'}),handleGripMat=L({color:'#ea580c'}),miniItemGeo=new THREE.BoxGeometry(.11,.11,.11);
 function createTrolley3D(){
   const tr=new THREE.Group();
@@ -266,13 +434,12 @@ function createTrolley3D(){
     const sup=new THREE.Mesh(new THREE.CylinderGeometry(.014,.014,.2),metalMat);
     sup.position.set(hx,.74,-.36);sup.rotation.x=.35;tr.add(sup);
   });
-
   tr.itemsGroup=new THREE.Group();tr.itemsGroup.position.set(0,.38,0);tr.add(tr.itemsGroup);
   tr.itemsCount=0;
   return tr;
 }
 
-// Pixar Faces
+// Pixar Face Textures
 function createPixarFaceTexture(type, eyeColor, skinTone){
   const fc=document.createElement('canvas');fc.width=512;fc.height=512;const fx=fc.getContext('2d');
   fx.fillStyle=skinTone;fx.fillRect(0,0,512,512);
@@ -304,12 +471,17 @@ function createPixarFaceTexture(type, eyeColor, skinTone){
   return new THREE.CanvasTexture(fc);
 }
 
-function buildPixarCharacter(id, name, role, hasTrolley=false){
+// Character Builder
+function buildPixarCharacter(id, name, role, hasTrolley=false, isManager=false, isSalesman=false){
   const g=new THREE.Group();
   let skinTone='#fcd5b8', eyeColor='#2563eb', hairColor='#2b1810';
   let shirtColor='#3b82f6', pantsColor='#1e293b', shoeColor='#ffffff';
 
-  if(id===1){ skinTone='#fbd2a4';eyeColor='#1e293b';hairColor='#18181b';shirtColor='#ea580c';pantsColor='#18181b';shoeColor='#f97316';}
+  if(isManager){
+    skinTone='#fed7aa';eyeColor='#1e293b';hairColor='#1c1917';shirtColor='#0f172a';pantsColor='#0f172a';shoeColor='#09090b';
+  } else if(isSalesman){
+    skinTone='#fbd2a4';eyeColor='#0284c7';hairColor='#292524';shirtColor='#ea580c';pantsColor='#1e293b';shoeColor='#ffffff';
+  } else if(id===1){ skinTone='#fbd2a4';eyeColor='#1e293b';hairColor='#18181b';shirtColor='#ea580c';pantsColor='#18181b';shoeColor='#f97316';}
   else if(id===2){ skinTone='#fed7aa';eyeColor='#0284c7';hairColor='#451a03';shirtColor='#ef4444';pantsColor='#3b82f6';shoeColor='#ffffff';}
   else if(id===3){ skinTone='#fde2d0';eyeColor='#059669';hairColor='#1e293b';shirtColor='#84a98c';pantsColor='#52796f';shoeColor='#f472b6';}
   else if(id===4){ skinTone='#fed7aa';eyeColor='#0f172a';hairColor='#5c3a21';shirtColor='#38bdf8';pantsColor='#2563eb';shoeColor='#ffffff';}
@@ -324,43 +496,26 @@ function buildPixarCharacter(id, name, role, hasTrolley=false){
   const head=new THREE.Mesh(headGeo,headMats);
   head.position.set(0,1.55,0);head.rotation.y=Math.PI/2;g.add(head);
 
-  if(id===1){
-    const hairBase=new THREE.Mesh(new THREE.SphereGeometry(.22,14,10,0,Math.PI*2,0,Math.PI/1.7),hairMat);hairBase.position.set(0,1.66,-.02);g.add(hairBase);
-    for(let i=0;i<7;i++){
-      const spike=new THREE.Mesh(new THREE.ConeGeometry(.06,.18,6),hairMat);
-      spike.position.set(-.1+i*.035,1.82+.01*(i%2),-.04+Math.sin(i)*.03);spike.rotation.x=.3;g.add(spike);
-    }
+  const hairBase=new THREE.Mesh(new THREE.SphereGeometry(.22,14,10,0,Math.PI*2,0,Math.PI/1.7),hairMat);
+  hairBase.position.set(0,1.66,-.02);g.add(hairBase);
+
+  if(isManager){
     const gm=L({color:'#09090b'});
-    const rimL=new THREE.Mesh(new THREE.BoxGeometry(.15,.12,.03),gm);rimL.position.set(-.09,1.56,.19);g.add(rimL);
-    const rimR=new THREE.Mesh(new THREE.BoxGeometry(.15,.12,.03),gm);rimR.position.set(.09,1.56,.19);g.add(rimR);
-    const bridge=new THREE.Mesh(new THREE.BoxGeometry(.06,.02,.02),gm);bridge.position.set(0,1.58,.19);g.add(bridge);
-  } else if(id===2){
-    const hair=new THREE.Mesh(new THREE.SphereGeometry(.22,14,12,0,Math.PI*2,0,Math.PI/1.7),hairMat);hair.position.set(0,1.65,-.01);hair.rotation.z=-.2;g.add(hair);
-  } else if(id===3){
-    const hairTop=new THREE.Mesh(new THREE.SphereGeometry(.24,16,14,0,Math.PI*2,0,Math.PI/1.6),hairMat);hairTop.position.set(0,1.66,-.02);g.add(hairTop);
-    const hairBack=new THREE.Mesh(new THREE.CylinderGeometry(.12,.22,.65,10),hairMat);hairBack.position.set(0,1.3,-.18);hairBack.rotation.x=.35;g.add(hairBack);
-  } else if(id===4){
-    const hairBase=new THREE.Mesh(new THREE.SphereGeometry(.23,14,12,0,Math.PI*2,0,Math.PI/1.65),hairMat);hairBase.position.set(0,1.66,-.01);g.add(hairBase);
-    for(let f=0;f<8;f++){
-      const curl=new THREE.Mesh(new THREE.DodecahedronGeometry(.065),hairMat);
-      curl.position.set(-.12+f*.035,1.79+Math.sin(f)*.02,.02);g.add(curl);
-    }
+    const rimL=new THREE.Mesh(new THREE.BoxGeometry(.14,.1,.02),gm);rimL.position.set(-.08,1.56,.19);g.add(rimL);
+    const rimR=new THREE.Mesh(new THREE.BoxGeometry(.14,.1,.02),gm);rimR.position.set(.08,1.56,.19);g.add(rimR);
+    const bridge=new THREE.Mesh(new THREE.BoxGeometry(.05,.02,.02),gm);bridge.position.set(0,1.57,.19);g.add(bridge);
+    const tie=new THREE.Mesh(new THREE.BoxGeometry(.08,.35,.02),L({color:'#dc2626'}));
+    tie.position.set(0,1.16,.15);g.add(tie);
   }
 
   const chest=new THREE.Mesh(new THREE.BoxGeometry(.46,.45,.28),shirtMat);chest.position.set(0,1.12,0);g.add(chest);
   g.chestRef=chest;
 
-  if(id===1){
-    const inner=new THREE.Mesh(new THREE.BoxGeometry(.18,.45,.02),L({color:'#0f172a'}));inner.position.set(0,1.12,.14);g.add(inner);
-    const stringL=new THREE.Mesh(new THREE.CylinderGeometry(.01,.01,.18),L({color:'#ef4444'}));stringL.position.set(-.05,1.06,.16);g.add(stringL);
-    const stringR=new THREE.Mesh(new THREE.CylinderGeometry(.01,.01,.18),L({color:'#ef4444'}));stringR.position.set(.05,1.06,.16);g.add(stringR);
-  } else if(id===2){
-    const collar=new THREE.Mesh(new THREE.TorusGeometry(.11,.02,8,16),L({color:'#ffffff'}));collar.position.set(0,1.33,0);collar.rotation.x=Math.PI/2;g.add(collar);
-  } else if(id===3){
-    const btn=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.02,12),L({color:'#3f2e18'}));btn.position.set(0,1.12,.15);btn.rotation.x=Math.PI/2;g.add(btn);
-  } else if(id===4){
-    const pocket=new THREE.Mesh(new THREE.BoxGeometry(.26,.14,.04),L({color:'#0284c7'}));pocket.position.set(0,.98,.14);g.add(pocket);
+  if(isSalesman){
+    const badge=new THREE.Mesh(new THREE.BoxGeometry(.1,.06,.02),L({color:'#ffffff'}));
+    badge.position.set(.12,1.2,.15);g.add(badge);
   }
+
   const waist=new THREE.Mesh(new THREE.BoxGeometry(.4,.18,.26),pantsMat);waist.position.set(0,.83,0);g.add(waist);
 
   g.arms=[-1,1].map(side=>{
@@ -405,10 +560,11 @@ function buildPixarCharacter(id, name, role, hasTrolley=false){
   }
 
   const tc=document.createElement('canvas');tc.width=256;tc.height=68;const tx=tc.getContext('2d');
-  tx.fillStyle='rgba(15,23,42,0.85)';tx.beginPath();tx.roundRect(4,4,248,60,12);tx.fill();
-  tx.strokeStyle='#ea580c';tx.lineWidth=2;tx.stroke();
+  tx.fillStyle=isManager?'rgba(30,58,138,0.9)':'rgba(15,23,42,0.85)';
+  tx.beginPath();tx.roundRect(4,4,248,60,12);tx.fill();
+  tx.strokeStyle=isManager?'#38bdf8':'#ea580c';tx.lineWidth=2;tx.stroke();
   tx.fillStyle='#fff';tx.font='bold 24px system-ui,sans-serif';tx.textAlign='center';tx.fillText(name,128,30);
-  tx.fillStyle='#ea580c';tx.font='15px system-ui,sans-serif';tx.fillText(role,128,52);
+  tx.fillStyle=isManager?'#38bdf8':'#f97316';tx.font='15px system-ui,sans-serif';tx.fillText(role,128,52);
   const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(tc),transparent:true}));
   sp.scale.set(1.4,.38,1);sp.position.y=2.15;g.add(sp);g.tag=sp;
 
@@ -430,7 +586,151 @@ function animateTrolleyPush(g,T,isMoving){
   }
 }
 
-// Counters
+// Manager in Executive Office
+const managerNpc = buildPixarCharacter(1, 'Mr. Tariq', 'Store Manager', false, true, false);
+managerNpc.position.set(14, 0, -16.5);
+managerNpc.rotation.y = 0;
+S.add(managerNpc);
+
+// Salesmen with 15-20 High-Converting Reasons
+const salesmenData = [
+  { 
+    name: 'Kashif', 
+    role: 'Sales (Tech & Watches)', 
+    section: 'Tech & Watches', 
+    x: -8, z: 3.5, 
+    pitch: 'Bhaijaan! Market mein dhakkay khane ke bajaye yeh direct imported Smartwatches aur Tech Gadgets check karein.',
+    featuredProdId: 0,
+    reasons: [
+      "1. Zero Financial Risk: Pehle parcel hath mein lein, phir Cash on Delivery dein.",
+      "2. 7 Days Inspection: Khulla parcel check karne ki mukammal azaadi.",
+      "3. Personality Upgrade: Premium stainless steel finish meetings mein alag rob banati hai.",
+      "4. Health Tracker: Heart-rate, BP aur steps track kare taake fitness barqarar rahe.",
+      "5. Calling & Notifications: Driving ke waqt phone nikalne ki zaroorat nahi.",
+      "6. Long-Lasting Battery: 7 din tak charging ki tension khatam.",
+      "7. Price Protection: Aglay stock mein dollar rate barhne se pehle purani price par milegi."
+    ]
+  },
+  { 
+    name: 'Zeeshan', 
+    role: 'Sales (Beauty & Skincare)', 
+    section: 'Skincare & Beauty', 
+    x: -2, z: -4.5, 
+    pitch: 'Skin damage aur dhoop ke asraat se bachne ke liye hamari certified Skincare range check karein!',
+    featuredProdId: 20,
+    reasons: [
+      "1. Doctor Tested: Harmful chemicals se paak, har skin type ke liye 100% safe.",
+      "2. Fauri Results: 7 din ke regular use se visible glow aur fresh look.",
+      "3. All-in-One Solution: Cleanser, Moisturizer aur Serum ek hi pack mein.",
+      "4. Long-Term Saving: Parlour par hazaron zaya karne se behtar rozana ghar par care.",
+      "5. 100% Original Guarantee: Direct verified source se imported.",
+      "6. Open Parcel COD: Delivery boy ke samne check karein, phir cash dein."
+    ]
+  },
+  { 
+    name: 'Usman', 
+    role: 'Sales (Home & Auto)', 
+    section: 'Auto & Home Living', 
+    x: 4, z: 3.5, 
+    pitch: 'Gaari mein emergency aur kitchen mein bikhray saman ke permanent hal ke liye yeh zaroor dekhein!',
+    featuredProdId: 34,
+    reasons: [
+      "1. Roadside Lifesaver: Raat ko sunsaan road par tyre puncture ho to 3 min mein hawa bhare.",
+      "2. Mechanic Ki Zaroorat Khatam: Gaari ke 12V socket se chalta hai.",
+      "3. Heavy Duty & Durable: Solid metal motor jo saalon saal chale.",
+      "4. Family Safety: Safar par nikalte waqt gaari mein hona lazmi hai.",
+      "5. 7 Days Money-Back Guarantee: Pasand na aaye to full cash wapsi."
+    ]
+  }
+];
+
+const SALESMEN = [];
+salesmenData.forEach(sd=>{
+  const sm = buildPixarCharacter(2, sd.name, sd.role, false, false, true);
+  sm.position.set(sd.x, 0, sd.z);
+  sm.rotation.y = Math.PI / 2;
+  sm.userData = sd;
+  S.add(sm);
+  SALESMEN.push(sm);
+  BL.push({x: sd.x, z: sd.z, hx: .7, hz: .7});
+});
+
+// Dialogue System
+const dialogModal = document.getElementById('dialogModal');
+const dialogAvatar = document.getElementById('dialogAvatar');
+const dialogTitle = document.getElementById('dialogTitle');
+const dialogSubtitle = document.getElementById('dialogSubtitle');
+const dialogText = document.getElementById('dialogText');
+const dialogOptions = document.getElementById('dialogOptions');
+const talkPromptBtn = document.getElementById('talkPromptBtn');
+
+let activeInteractTarget = null;
+
+function openManagerDialog(){
+  activeInteractTarget = 'manager';
+  dialogModal.style.display = 'block';
+  dialogAvatar.textContent = '👔';
+  dialogTitle.textContent = 'Mr. Tariq';
+  dialogSubtitle.textContent = 'OrangeMart Store Manager';
+  dialogText.textContent = 'Assalam-o-Alaikum! Main OrangeMart ka Branch Manager hoon. Koi shikayat, delivery sawal ya masla ho to zaroor batayein:';
+
+  dialogOptions.innerHTML = `
+    <button class="dlgBtn" onclick="managerAnswer(1)">❓ Cash on Delivery (COD) ka kya tareeqa hai?</button>
+    <button class="dlgBtn" onclick="managerAnswer(2)">🔄 Return ya Exchange Policy kya hai?</button>
+    <button class="dlgBtn" onclick="managerAnswer(3)">📄 Bill ki PDF copy aur Google Sheet record?</button>
+    <button class="dlgBtn" onclick="managerAnswer(4)">🏷️ Bulk Order ya Special Discount mil sakta hai?</button>
+    <button class="dlgBtn" id="dlgCloseBtn" onclick="closeDialog()">❌ Shukriya / Close</button>
+  `;
+}
+
+function managerAnswer(qNum){
+  if(qNum === 1){
+    dialogText.textContent = '📦 COD Rule: Aap store se jo bhi item trolley mein add karenge, Checkout 04 par order confirm ho jayega. Koi advance payment nahi karni, cash rider ko delivery ke waqt dena hai.';
+  } else if(qNum === 2){
+    dialogText.textContent = '🔄 Return Policy: Agar product damage ho ya pasand na aaye to 7 din ke andar invoice ke sath hamare isi office se replacement ya 100% Cash refund mil jata hai.';
+  } else if(qNum === 3){
+    dialogText.textContent = '📄 PDF & Sheet Sync: Checkout par form submit hote hi aapka order seedha owner ki Google Sheet mein live darj ho jata hai aur screen par official PDF download ho jati hai.';
+  } else if(qNum === 4){
+    dialogText.textContent = '🏷️ Bulk Discount: Agar aap 10 se zyada items order karenge to hamara system automatically checkout par 10% special promotional discount apply kar dega!';
+  }
+}
+
+function openSalesmanDialog(sm){
+  activeInteractTarget = sm;
+  dialogModal.style.display = 'block';
+  dialogAvatar.textContent = '🧑‍💼';
+  dialogTitle.textContent = sm.userData.name;
+  dialogSubtitle.textContent = sm.userData.role;
+  dialogText.textContent = `${sm.userData.pitch}\n\nYeh product kyun lena chahiye? Neeche faiday dekhein:`;
+
+  let reasonsHtml = `<div style="font-size:12px;color:#fde047;line-height:1.4;margin-bottom:8px"><b>Top Reasons to Buy:</b><br>${sm.userData.reasons.join('<br>')}</div>`;
+
+  dialogOptions.innerHTML = `
+    ${reasonsHtml}
+    <button class="dlgBtn dlgBuyBtn" onclick="salesmanDirectBuy(${sm.userData.featuredProdId})">🛒 Zabardast! Yeh Meri Trolley Mein Daalo</button>
+    <button class="dlgBtn" onclick="salesmanAnswer(2)">⭐ Is Section Ka Best Seller Kaunsa Hai?</button>
+    <button class="dlgBtn" id="dlgCloseBtn" onclick="closeDialog()">❌ Baad Mein Dekhte Hain / Close</button>
+  `;
+}
+
+function salesmanDirectBuy(prodId){
+  if(PR[prodId]){
+    add(prodId);
+    dialogText.textContent = `✅ Behtareen faisla! ${PR[prodId].n} aapki trolley mein daal diya gaya hai. Checkout 04 par Cash on Delivery confirm karein!`;
+  }
+}
+
+function salesmanAnswer(qNum){
+  if(!activeInteractTarget || activeInteractTarget === 'manager') return;
+  dialogText.textContent = `⭐ Best Seller: Hamari top-rated items is shelf ke darmiyan mein placed hain. User ratings 4.9/5 hain aur sab par 7 days money-back guarantee hai!`;
+}
+
+function closeDialog(){
+  dialogModal.style.display = 'none';
+  activeInteractTarget = null;
+}
+
+// Checkouts & Counters
 function disp(c,t,col){
   const x=c.dc.getContext('2d');x.clearRect(0,0,256,64);x.fillStyle=col;x.fillRect(4,4,248,56);
   x.fillStyle='#fff';x.font='900 24px system-ui,sans-serif';x.textAlign='center';x.textBaseline='middle';
@@ -440,14 +740,14 @@ function disp(c,t,col){
 const CT=[];
 const marbleMat=L({color:'#f8fafc'}),flutedOak=L({color:'#9a6f44'}),kickMat=L({color:'#0f172a'});
 const counterConfigs=[
-  [-7,'CHECKOUT 01',false,'Hamza · Cashier'],
-  [-3.5,'CHECKOUT 02',false,'Ayesha · Cashier'],
+  [-9,'CHECKOUT 01',false,'Hamza · Cashier'],
+  [-4.5,'CHECKOUT 02',false,'Ayesha · Cashier'],
   [0,'CHECKOUT 03',false,'Bilal · Cashier'],
-  [6,'CHECKOUT 04 · EXPRESS',true,'Max · OrangeMart Cashier']
+  [5.5,'CHECKOUT 04 · EXPRESS',true,'Max · OrangeMart Cashier']
 ];
 
 counterConfigs.forEach(([x,cname,real,cashierName],idx)=>{
-  const z=8.6,col=real?'#16a34a':'#ea580c';
+  const z=11.5,col=real?'#16a34a':'#ea580c';
   box(2.4,.86,.88,flutedOak,x,.43,z);
   box(2.4,.08,.84,kickMat,x,.04,z);
   box(2.38,.02,.86,new THREE.MeshBasicMaterial({color:'#fde047'}),x,.08,z);
@@ -460,27 +760,19 @@ counterConfigs.forEach(([x,cname,real,cashierName],idx)=>{
   const sg=modernCatSign(cname,2.6,.48,col);sg.position.set(x,2.6,z);sg.rotation.y=Math.PI;S.add(sg);
   
   const ck=buildPixarCharacter(idx===3?1:(idx===2?2:4), cashierName, 'Store Associate', false);
-  ck.position.set(x,0,9.6);ck.rotation.y=Math.PI;S.add(ck);
+  ck.position.set(x,0,12.5);ck.rotation.y=Math.PI;S.add(ck);
 
   const dc=document.createElement('canvas');dc.width=256;dc.height=64;
   const tex=new THREE.CanvasTexture(dc);
   const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true}));
-  sp.scale.set(2,.5,1);sp.position.set(x,1.7,8.2);S.add(sp);
+  sp.scale.set(2,.5,1);sp.position.set(x,1.7,11.1);S.add(sp);
 
   const c={x,z,real:!!real,ck,dc,tex,q:[],busy:0,t:0,reset:0};
-  CT.push(c);
+  CT.push(c);BL.push({x,z,hx:1.3,hz:.8});
   disp(c,real?'CHECKOUT 04 · OPEN':'LANE OPEN',col);
 });
 
-// Gates
-const matteBlack=L({color:'#1e2229'});
-[[9.6,'ENTRANCE','#16a34a'],[3,'EXIT','#dc2626']].forEach(([x,t,c])=>{
-  const s=modernCatSign(t,2,.48,c);s.position.set(x,2.8,10.85);s.rotation.y=Math.PI;S.add(s);
-  box(1.7,2.4,.06,matteBlack,x,1.2,10.86);
-  box(1.5,2.2,.02,new THREE.MeshLambertMaterial({color:'#38bdf8',transparent:true,opacity:0.35}),x,1.2,10.87);
-});
-
-// Player Trolley
+// Player First-Person Trolley
 const TR=new THREE.Group();TR.position.set(0,-.7,-1.1);cam.add(TR);
 [[.7,.04,.5,0,0,0],[.7,.3,.03,0,.15,.25],[.7,.3,.03,0,.15,-.25],[.03,.3,.5,.35,.15,0],[.03,.3,.5,-.35,.15,0],[.74,.04,.05,0,.34,.29],[.04,.6,.04,.3,-.32,.2],[.04,.6,.04,-.3,-.32,.2]].forEach(a=>{
   const m=new THREE.Mesh(new THREE.BoxGeometry(a[0],a[1],a[2]),L({color:'#94a3b8'}));m.position.set(a[3],a[4],a[5]);TR.add(m);
@@ -490,8 +782,8 @@ function trolleyAdd(c){const n=TI.length;if(n>=24)return;const m=new THREE.Mesh(
 function trolleyClear(){TI.forEach(m=>TR.remove(m));TI.length=0}
 
 // Safe Navigation System
-const AISLE_X = [-9.6, -6.0, -2.0, 2.0, 6.0, 9.6];
-const CROSS_Z = [6.8, 1.25, -4.25, -9.6];
+const AISLE_X = [-14.5, -8.0, -2.0, 4.0, 10.0, 14.5];
+const CROSS_Z = [8.5, 0.0, -8.5, -16.5];
 function getClosest(val, arr){return arr.reduce((p,c)=>Math.abs(c-val)<Math.abs(p-val)?c:p)}
 
 function planSafeAislePath(n, targetX, targetZ){
@@ -512,14 +804,11 @@ const roasters=[
   {id:4, name:'Arjun', role:'Shopper'}
 ];
 
-const NP=[],qz=i=>6.8-i*1.4;
-
+const NP=[],qz=i=>9.5-i*1.4;
 let PR=[], hits=[], gond=[];
-const BL=[...counterConfigs.map(c=>({x:c[0],z:8.6,hx:1.3,hz:.8}))];
 
-// CONVERT 72 FLAT PRODUCTS INTO 8 ORGANIZED DEPARTMENTS
 function organizeOrangeMartProducts(flatList){
-  const categories = [
+  return [
     { name: "Luxury Watches", emoji: "⌚", color: "#f97316", items: flatList.slice(0, 10) },
     { name: "Audio & Bags", emoji: "🎧", color: "#3b82f6", items: flatList.slice(10, 20) },
     { name: "Skincare & Beauty", emoji: "🧴", color: "#ec4899", items: flatList.slice(20, 30) },
@@ -529,7 +818,6 @@ function organizeOrangeMartProducts(flatList){
     { name: "Lifestyle Gear", emoji: "🎒", color: "#8b5cf6", items: flatList.slice(60, 66) },
     { name: "Gadget Essentials", emoji: "🔌", color: "#06b6d4", items: flatList.slice(66, 72) }
   ];
-  return categories;
 }
 
 function buildStoreShelves(deptList){
@@ -538,7 +826,7 @@ function buildStoreShelves(deptList){
   aisles.innerHTML='';
 
   deptList.forEach((dept,ci)=>{
-    const gx=-8+4*Math.floor(ci/2), gz=[3.5, -4.5][ci%2];
+    const gx=-11+6*(ci%4), gz=[3.5, -4.5][Math.floor(ci/4)];
     gond.push({x:gx,z:gz,hx:.95,hz:2.1});
     BL.push({x:gx,z:gz,hx:.95,hz:2.1});
 
@@ -579,36 +867,33 @@ function buildStoreShelves(deptList){
     aisles.appendChild(b);
   });
 
-  [['💳 Checkout 04 (Express)',6,6.9],['🧾 Counter Lanes',-3.5,6.4]].forEach(([t,x,z])=>{
+  [['👔 Manager Office',12,1.6,-13.5],['💳 Checkout 04',5.5,1.6,9.5],['🧾 Counters',-4.5,1.6,9.5]].forEach(([t,x,y,z])=>{
     const b=document.createElement('button');b.textContent=t;
-    b.onclick=()=>{cam.position.set(x,1.6,z);yaw=Math.PI;pitch=-.05;closeP()};
+    b.onclick=()=>{cam.position.set(x,y,z);yaw=Math.PI;pitch=-.05;closeP()};
     aisles.appendChild(b);
   });
 
   initNpcShoppers();
 }
 
-// ATTEMPT TO FETCH OrangeMart_Product_Names_Prices.json, OR FALLBACK TO RAW EMBEDDED LIST
+// Fetch or Use Embedded List
 fetch('./OrangeMart_Product_Names_Prices.json')
   .then(res=>{
-    if(!res.ok) throw new Error("JSON file not found locally, using embedded 72 products");
+    if(!res.ok) throw new Error("Using embedded list");
     return res.json();
   })
   .then(data=>{
-    const depts = organizeOrangeMartProducts(data);
-    buildStoreShelves(depts);
+    buildStoreShelves(organizeOrangeMartProducts(data));
   })
-  .catch(err=>{
-    console.log("Loading directly from embedded OrangeMart list:", err.message);
-    const depts = organizeOrangeMartProducts(RAW_ORANGE_MART);
-    buildStoreShelves(depts);
+  .catch(()=>{
+    buildStoreShelves(organizeOrangeMartProducts(RAW_ORANGE_MART));
   });
 
 function nextShelf(n){
   if(!gond.length) return;
   const k=Math.floor(Math.random()*gond.length);
   const targetGondola = gond[k];
-  const sideOffset = (targetGondola.x >= 6) ? -1.6 : 1.6;
+  const sideOffset = (targetGondola.x >= 4) ? -1.6 : 1.6;
   const safeWalkX = targetGondola.x + sideOffset;
   planSafeAislePath(n, safeWalkX, targetGondola.z);
 }
@@ -617,7 +902,7 @@ function initNpcShoppers(){
   roasters.forEach((ch,i)=>{
     const g=buildPixarCharacter(ch.id, ch.name, ch.role, true);
     g.visible=false;S.add(g);
-    NP.push({g,x:9.6,z:10.5,wp:[],st:'wait',t:1+i*2.2,n:0,k:0,sum:0,ct:null,stuckTimer:0,lastX:9.6,lastZ:10.5});
+    NP.push({g,x:10,z:16,wp:[],st:'wait',t:1+i*2.2,n:0,k:0,sum:0,ct:null,stuckTimer:0,lastX:10,lastZ:16});
   });
 }
 
@@ -627,12 +912,13 @@ function npcTick(n,dt,T){
     n.t-=dt;
     if(n.t<=0){
       n.st='shop';n.n=2+Math.floor(Math.random()*3);n.k=0;n.sum=0;
-      g.visible=true;g.clearTrolley();n.x=9.6;n.z=10.5;g.position.set(n.x,0,n.z);
+      g.visible=true;g.clearTrolley();n.x=10;n.z=16;g.position.set(n.x,0,n.z);
       nextShelf(n);
     }
     return;
   }
 
+  // Aisle Traffic & Rasta Dena
   let steerX = 0, steerZ = 0, speedMultiplier = 1.0;
   for(const other of NP){
     if(other === n || !other.g.visible) continue;
@@ -714,14 +1000,14 @@ function npcTick(n,dt,T){
       disp(c,'COD: PKR '+n.sum,'#16a34a');c.busy=0;c.reset=2.5;c.q.shift();
       c.q.forEach((m,i)=>planSafeAislePath(m,c.x,qz(i)));
       n.st='exit';
-      planSafeAislePath(n, 3, 10.6);
+      planSafeAislePath(n, 2, 16.5);
     }
   }
   else if(n.st==='exit'){g.visible=false;n.st='wait';n.t=2+Math.random()*4}
 }
 
-// User Controls
-let yaw=Math.PI,pitch=-.05;const keys={f:0,b:0,l:0,r:0};
+// User Navigation Controls
+const keys={f:0,b:0,l:0,r:0};
 document.querySelectorAll('#pad [data-k]').forEach(b=>{
   const k=b.dataset.k;
   b.addEventListener('pointerdown',e=>{keys[k]=1;e.preventDefault()});
@@ -753,7 +1039,7 @@ function tap(px,py){
   if(h&&h.distance<9)add(h.object.userData.id);
 }
 
-// Cart Management
+// Cart
 const cart={};
 const panel=document.getElementById('panel'),aisles=document.getElementById('aisles'),btn=document.getElementById('cartBtn'),toast=document.getElementById('toast');
 let tt;
@@ -773,21 +1059,20 @@ function closeP(){panel.style.display='none';aisles.style.display='none'}
 btn.onclick=()=>{const o=panel.style.display==='block';closeP();if(!o)panel.style.display='block'};
 document.getElementById('aBtn').onclick=()=>{const o=aisles.style.display==='grid';closeP();if(!o)aisles.style.display='grid'};
 
-// Billing, Cash on Delivery & PDF Download
+// Billing, Cash on Delivery & Google Sheet
 const bill=document.getElementById('bill'),bc=document.getElementById('bc'),billBtn=document.getElementById('billBtn');
 let billTok=0,billNo=94210;
 function closeBill(){billTok++;bill.style.display='none';const r=CT[3];if(r.busy){r.busy=0;disp(r,'CHECKOUT 04 · OPEN','#16a34a')}}
 
-function generatePdfInvoice(purchasedItems, sub, gst, total, invoiceNumber, dateString){
+function generatePdfInvoice(purchasedItems, sub, gst, total, invoiceNumber, dateString, custName, custPhone, custAddress){
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-
   doc.setFillColor(15, 23, 42);
   doc.rect(0, 0, 210, 36, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(22);
   doc.setFont('helvetica', 'bold');
-  doc.text('ORANGE MART', 14, 18);
+  doc.text('ORANGE MART MEGA', 14, 18);
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   doc.text('Smart Retail Superstore · Official Tax Invoice', 14, 26);
@@ -798,21 +1083,22 @@ function generatePdfInvoice(purchasedItems, sub, gst, total, invoiceNumber, date
   doc.setTextColor(30, 41, 59);
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Invoice No: INV-${invoiceNumber}`, 14, 46);
-  doc.text(`Date & Time: ${dateString}`, 14, 52);
-  doc.text(`Billing Type: Cash on Delivery (COD)`, 14, 58);
-  doc.text(`Counter: Checkout Lane 04 (Express)`, 14, 64);
+  doc.text(`Invoice No: INV-${invoiceNumber}`, 14, 44);
+  doc.text(`Date & Time: ${dateString}`, 14, 50);
+  doc.text(`Customer Name: ${custName}`, 14, 56);
+  doc.text(`Phone / WhatsApp: ${custPhone}`, 14, 62);
+  doc.text(`Delivery Address: ${custAddress}`, 14, 68);
 
   doc.setFillColor(241, 245, 249);
-  doc.rect(14, 70, 182, 8, 'F');
+  doc.rect(14, 74, 182, 8, 'F');
   doc.setFont('helvetica', 'bold');
-  doc.text('Item Description', 18, 75);
-  doc.text('Qty', 110, 75);
-  doc.text('Price (PKR)', 135, 75);
-  doc.text('Total (PKR)', 165, 75);
+  doc.text('Item Description', 18, 79);
+  doc.text('Qty', 110, 79);
+  doc.text('Price (PKR)', 135, 79);
+  doc.text('Total (PKR)', 165, 79);
 
   doc.setFont('helvetica', 'normal');
-  let y = 84;
+  let y = 88;
   purchasedItems.forEach(it => {
     doc.text(it.n.slice(0,30), 18, y);
     doc.text(String(it.q), 112, y);
@@ -839,9 +1125,22 @@ function generatePdfInvoice(purchasedItems, sub, gst, total, invoiceNumber, date
   doc.setFontSize(9);
   doc.setFont('helvetica', 'italic');
   doc.setTextColor(100, 116, 139);
-  doc.text('Payment terms: Cash on Delivery. Please pay exact cash at reception/delivery. Shukriya!', 14, y + 20);
+  doc.text('Payment terms: Cash on Delivery. Rider will collect exact cash upon open parcel delivery. Shukriya!', 14, y + 20);
 
   doc.save(`OrangeMart_Invoice_INV-${invoiceNumber}.pdf`);
+}
+
+function sendOrderToGoogleSheet(orderPayload){
+  if(GOOGLE_SHEET_WEBAPP_URL && GOOGLE_SHEET_WEBAPP_URL !== "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE"){
+    fetch(GOOGLE_SHEET_WEBAPP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderPayload)
+    }).catch(e => console.log('Sheet Sync error:', e));
+  } else {
+    console.log("Mock Google Sheet Sync Payload:", orderPayload);
+  }
 }
 
 function pay(sub,tok,ft,purchasedItems){
@@ -850,31 +1149,58 @@ function pay(sub,tok,ft,purchasedItems){
     <div class='r'><span>Subtotal</span><b>PKR ${sub}</b></div>
     <div class='r'><span>Sales Tax (5%)</span><b>PKR ${gst}</b></div>
     <div class='r' style='font-size:16px;border-top:2px solid #0f172a;padding-top:6px'><b>Net Total Amount</b><b>PKR ${tot}</b></div>
-    <div style='margin-top:12px;font-weight:700;color:#0f172a'>Payment Mode:</div>
+    
+    <div style='margin-top:12px;font-weight:700;color:#0f172a'>Enter Customer Delivery Details:</div>
+    <input type='text' id='cName' class='custInput' placeholder='Aapka Mukammal Naam (Required)' required />
+    <input type='tel' id='cPhone' class='custInput' placeholder='WhatsApp / Phone Number (Required)' required />
+    <input type='text' id='cAddr' class='custInput' placeholder='Ghar Ka Pura Pata & Shehar (Required)' required />
+
     <button id='codBtn' style='width:100%;background:#ea580c;margin-top:6px;font-size:15px'>💵 Confirm Cash on Delivery (COD)</button>
-    <div style='font-size:11px;color:#64748b;margin-top:4px;text-align:center'>Only Cash on Delivery is available for this store.</div>
+    <div style='font-size:11px;color:#64748b;margin-top:4px;text-align:center'>Order seedha Owner ki Google Sheet mein live save ho jayega.</div>
     <button id='cx' style='width:100%;margin-top:8px'>Cancel</button>
   `;
 
   document.getElementById('codBtn').onclick=()=>{
-    ft.innerHTML='<div style="padding:14px 0;font-weight:700;color:#ea580c">⏳ Confirming Cash on Delivery Order…</div>';
+    const name = document.getElementById('cName').value.trim();
+    const phone = document.getElementById('cPhone').value.trim();
+    const addr = document.getElementById('cAddr').value.trim();
+
+    if(!name || !phone || !addr){
+      alert("Meharbani karke delivery ke liye Naam, Phone aur Address lazmi darj karein!");
+      return;
+    }
+
+    ft.innerHTML='<div style="padding:14px 0;font-weight:700;color:#ea580c">⏳ Sending Order to Google Sheet & Generating Invoice…</div>';
+    
     setTimeout(()=>{
       if(tok!==billTok)return;billNo++;
       const now = new Date();
       const dateStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      
+      const itemsSummary = purchasedItems.map(i => `${i.n} (x${i.q})`).join(", ");
+
+      sendOrderToGoogleSheet({
+        timestamp: dateStr,
+        invoiceNumber: "INV-" + billNo,
+        customerName: name,
+        customerPhone: phone,
+        customerAddress: addr,
+        itemsList: itemsSummary,
+        totalAmount: tot,
+        paymentMethod: "Cash on Delivery (COD)"
+      });
+
       ft.innerHTML=`
-        <div class='r' style='background:#fff7ed;padding:8px;border-radius:8px;color:#ea580c'><b>✅ CASH ON DELIVERY ORDER PLACED</b></div>
+        <div class='r' style='background:#fff7ed;padding:8px;border-radius:8px;color:#ea580c'><b>✅ ORDER RECORDED IN OWNER SHEET</b></div>
         <div class='r'><span>Invoice Number</span><b>INV-${billNo}</b></div>
-        <div class='r'><span>Payment Method</span><b>Cash on Delivery (COD)</b></div>
+        <div class='r'><span>Customer</span><b>${name}</b></div>
         <div class='r'><span>Amount Payable</span><b>PKR ${tot}</b></div>
-        <div class='r'><span>Order Time</span><b>${dateStr}</b></div>
+        <div class='r'><span>Payment Type</span><b>Cash on Delivery (COD)</b></div>
         <button id='dlPdf' style='width:100%;background:#0284c7;margin-top:12px;font-size:14px'>📥 Download Invoice (PDF)</button>
         <button id='dn' style='width:100%;margin-top:8px'>Done / Close</button>
       `;
 
       document.getElementById('dlPdf').onclick=()=>{
-        generatePdfInvoice(purchasedItems, sub, gst, tot, billNo, dateStr);
+        generatePdfInvoice(purchasedItems, sub, gst, tot, billNo, dateStr, name, phone, addr);
       };
 
       for(const k in cart)delete cart[k];render();trolleyClear();
@@ -890,7 +1216,7 @@ billBtn.onclick=()=>{
   const tok=++billTok;bill.style.display='flex';CT[3].busy=1;disp(CT[3],'SCANNING ITEMS…','#f59f00');
   bc.innerHTML=`
     <div style='text-align:center;border-bottom:2px solid #ea580c;padding-bottom:6px;margin-bottom:8px'>
-      <b style='font-size:16px;color:#ea580c'>ORANGE MART</b>
+      <b style='font-size:16px;color:#ea580c'>ORANGE MART MEGA</b>
       <div style='font-size:11px;color:#64748b'>TAX INVOICE · CASH ON DELIVERY ONLY</div>
       <div style='font-size:12px;font-weight:600;margin-top:2px'>CHECKOUT LANE 04 (EXPRESS)</div>
     </div>
@@ -911,6 +1237,9 @@ billBtn.onclick=()=>{
   },k*gap+200));
 };
 
+// ==========================================
+// 6. TICK & DISTANCE CHECK
+// ==========================================
 function tick(dt){
   const T=clock.elapsedTime;
   NP.forEach(n=>npcTick(n,dt,T));
@@ -918,24 +1247,56 @@ function tick(dt){
     c.ck.arms[1].rotation.x=c.busy?-0.9+Math.sin(T*10)*.35:Math.sin(T*2)*.05;
     if(c.reset>0){c.reset-=dt;if(c.reset<=0&&!c.busy)disp(c,c.real?'CHECKOUT 04 · OPEN':'LANE OPEN',c.real?'#16a34a':'#ea580c')}
   });
-  const p=cam.position,near=Math.hypot(p.x-6,p.z-7.2)<2.8&&bill.style.display!=='flex';
-  billBtn.style.display=near?'block':'none';
-  if(near){const w=Object.keys(cart).length?'💳 Proceed to Checkout':'💳 Cart is empty';if(billBtn.textContent!==w)billBtn.textContent=w}
+
+  const p=cam.position;
+
+  // Sensor Auto Doors
+  const distToEntrance = Math.hypot(p.x - 10, p.z - 18.35);
+  updateAutoDoors(dt, distToEntrance);
+
+  // Proximity to Checkout 04
+  const nearCheckout=Math.hypot(p.x-5.5,p.z-10.2)<2.8&&bill.style.display!=='flex';
+  billBtn.style.display=nearCheckout?'block':'none';
+  if(nearCheckout){const w=Object.keys(cart).length?'💳 Proceed to Checkout':'💳 Cart is empty';if(billBtn.textContent!==w)billBtn.textContent=w}
+
+  // Proximity to Manager
+  const distToManager = Math.hypot(p.x - 14, p.z - (-16.5));
+  let nearSalesman = null;
+  SALESMEN.forEach(sm=>{
+    const d = Math.hypot(p.x - sm.position.x, p.z - sm.position.z);
+    if(d < 2.6) nearSalesman = sm;
+  });
+
+  if(dialogModal.style.display !== 'block'){
+    if(distToManager < 3.2){
+      talkPromptBtn.style.display = 'block';
+      talkPromptBtn.textContent = '👔 Talk to Manager (Customer Care)';
+      talkPromptBtn.onclick = openManagerDialog;
+    } else if(nearSalesman){
+      talkPromptBtn.style.display = 'block';
+      talkPromptBtn.textContent = `💬 Ask ${nearSalesman.userData.name} (${nearSalesman.userData.section})`;
+      talkPromptBtn.onclick = () => openSalesmanDialog(nearSalesman);
+    } else {
+      talkPromptBtn.style.display = 'none';
+    }
+  } else {
+    talkPromptBtn.style.display = 'none';
+  }
 }
 
-setTimeout(()=>document.getElementById('hint').style.opacity=0,8000);
+setTimeout(()=>document.getElementById('hint').style.opacity=0,8500);
 
-// Physics & Loop
+// Collision & Movement Bounds
 const blocked=(x,z)=>BL.some(g=>Math.abs(x-g.x)<g.hx&&Math.abs(z-g.z)<g.hz);
 const clock=new THREE.Clock();
 
 function loop(){
-  const dt=Math.min(clock.getDelta(),.05),sp=3.2*dt;
+  const dt=Math.min(clock.getDelta(),.05),sp=3.4*dt;
   const f=keys.f-keys.b,r=keys.r-keys.l,p=cam.position;
   const nx=p.x+(-Math.sin(yaw)*f+Math.cos(yaw)*r)*sp,nz=p.z+(-Math.cos(yaw)*f-Math.sin(yaw)*r)*sp;
   if(!blocked(nx,p.z))p.x=nx;
   if(!blocked(p.x,nz))p.z=nz;
-  p.x=Math.max(-10,Math.min(10,p.x));p.z=Math.max(-11,Math.min(10.5,p.z));
+  p.x=Math.max(-17.2,Math.min(17.2,p.x));p.z=Math.max(-18.5,Math.min(18.2,p.z));
   cam.rotation.set(pitch,yaw,0);
   tick(dt);
   R.render(S,cam);
